@@ -1,4 +1,4 @@
-AC_REVISION([$Id: configure.ac,v 1.1 2003/03/24 19:01:09 rocky Exp $])dnl
+AC_REVISION([$Id: configure.ac,v 1.1.1.1 2003/03/24 19:01:09 rocky Exp $])dnl
 AC_INIT(lib/cdio.c)
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(libcdio, 0.1)

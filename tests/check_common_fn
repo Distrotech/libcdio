@@ -1,4 +1,4 @@
-# $Id: check_common_fn,v 1.1 2003/03/24 19:01:10 rocky Exp $
+# $Id: check_common_fn,v 1.1.1.1 2003/03/24 19:01:10 rocky Exp $
 
 have_cmp() {
   if cmp /dev/null /dev/null > /dev/null 2>&1; then

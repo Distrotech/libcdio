@@ -1,5 +1,5 @@
 /*
-    $Id: _cdio_stdio.h,v 1.1 2003/03/24 19:01:09 rocky Exp $
+    $Id: _cdio_stdio.h,v 1.1.1.1 2003/03/24 19:01:09 rocky Exp $
 
     Copyright (C) 2000 Herbert Valerio Riedel <hvr@gnu.org>
     Copyright (C) 2003 Rocky Bernstein <rocky@panix.com>

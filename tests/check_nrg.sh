@@ -1,5 +1,5 @@
 #!/bin/sh
-#$Id: check_nrg.sh,v 1.1 2003/03/24 19:01:10 rocky Exp $
+#$Id: check_nrg.sh,v 1.1.1.1 2003/03/24 19:01:10 rocky Exp $
 
 if test -z $srcdir ; then
   srcdir=`pwd`

@@ -1,5 +1,5 @@
 /*
-    $Id: sector.c,v 1.1 2003/03/24 19:01:09 rocky Exp $
+    $Id: sector.c,v 1.1.1.1 2003/03/24 19:01:09 rocky Exp $
 
     Copyright (C) 2000 Herbert Valerio Riedel <hvr@gnu.org>
 
@@ -26,7 +26,7 @@
 #include "sector.h"
 #include "util.h"
 
-static const char _rcsid[] = "$Id: sector.c,v 1.1 2003/03/24 19:01:09 rocky Exp $";
+static const char _rcsid[] = "$Id: sector.c,v 1.1.1.1 2003/03/24 19:01:09 rocky Exp $";
 
 void
 cdio_lba_to_msf (uint32_t lba, msf_t *msf)
