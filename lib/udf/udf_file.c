@@ -34,7 +34,7 @@
 #define CEILING(x, y) ((x+(y-1))/y)
 
 #define	GETICB(offset)	\
-	&p_udf_fe->alloc_descs[offset]
+	&p_udf_fe->u.alloc_descs[offset]
 
 const char *
 udf_get_filename(const udf_dirent_t *p_udf_dirent)
@@ -44,8 +44,7 @@ udf_get_filename(const udf_dirent_t *p_udf_dirent)
   return p_udf_dirent->psz_name;
 }
 
-/* Get UDF File Entry. However we do NOT get the variable-length extended
- attributes. */
+/* Copy an UDF File Entry into a Directory Entry structure. */
 bool
 udf_get_file_entry(const udf_dirent_t *p_udf_dirent, 
 		   /*out*/ udf_file_entry_t *p_udf_fe)

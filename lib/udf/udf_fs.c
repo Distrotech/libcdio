@@ -68,6 +68,7 @@ const char VSD_STD_ID_TEA01[] = {'T', 'E', 'A', '0', '1'};
 #include <cdio/bytesex.h>
 #include "udf_private.h"
 #include "udf_fs.h"
+#include "cdio_assert.h"
 
 /*
  * The UDF specs are pretty clear on how each data structure is made
@@ -154,7 +155,7 @@ udf_get_lba(const udf_file_entry_t *p_udf_fe,
     {
       /* The allocation descriptor field is filled with short_ad's. */
       udf_short_ad_t *p_ad = (udf_short_ad_t *) 
-	(p_udf_fe->ext_attr + p_udf_fe->i_extended_attr);
+	(p_udf_fe->u.ext_attr + p_udf_fe->i_extended_attr);
       
       *start = uint32_from_le(p_ad->pos);
       *end = *start + 
@@ -166,7 +167,7 @@ udf_get_lba(const udf_file_entry_t *p_udf_fe,
     {
       /* The allocation descriptor field is filled with long_ad's */
       udf_long_ad_t *p_ad = (udf_long_ad_t *) 
-	(p_udf_fe->ext_attr + p_udf_fe->i_extended_attr);
+	(p_udf_fe->u.ext_attr + p_udf_fe->i_extended_attr);
       
       *start = uint32_from_le(p_ad->loc.lba); /* ignore partition number */
       *end = *start + 
@@ -177,7 +178,7 @@ udf_get_lba(const udf_file_entry_t *p_udf_fe,
   case ICBTAG_FLAG_AD_EXTENDED:
     {
       udf_ext_ad_t *p_ad = (udf_ext_ad_t *)
-	(p_udf_fe->ext_attr + p_udf_fe->i_extended_attr);
+	(p_udf_fe->u.ext_attr + p_udf_fe->i_extended_attr);
       
       *start = uint32_from_le(p_ad->ext_loc.lba); /* ignore partition number */
       *end = *start + 
@@ -287,11 +288,8 @@ static udf_dirent_t *
 udf_new_dirent(udf_file_entry_t *p_udf_fe, udf_t *p_udf,
 	       const char *psz_name, bool b_dir, bool b_parent) 
 {
-  const unsigned int i_alloc_size = p_udf_fe->i_alloc_descs
-    + p_udf_fe->i_extended_attr;
-  
   udf_dirent_t *p_udf_dirent = (udf_dirent_t *) 
-    calloc(1, sizeof(udf_dirent_t) + i_alloc_size);
+    calloc(1, sizeof(udf_dirent_t));
   if (!p_udf_dirent) return NULL;
   
   p_udf_dirent->psz_name     = strdup(psz_name);
@@ -302,7 +300,7 @@ udf_new_dirent(udf_file_entry_t *p_udf_fe, udf_t *p_udf,
   p_udf_dirent->dir_left     = uint64_from_le(p_udf_fe->info_len); 
 
   memcpy(&(p_udf_dirent->fe), p_udf_fe, 
-	 sizeof(udf_file_entry_t) + i_alloc_size);
+	 sizeof(udf_file_entry_t));
   udf_get_lba( p_udf_fe, &(p_udf_dirent->i_loc), 
 	       &(p_udf_dirent->i_loc_end) );
   return p_udf_dirent;
@@ -348,6 +346,9 @@ udf_open (const char *psz_path)
   uint8_t data[UDF_BLOCKSIZE];
 
   if (!p_udf) return NULL;
+
+  /* Sanity check */
+  cdio_assert(sizeof(udf_file_entry_t) == UDF_BLOCKSIZE);
 
   p_udf->cdio = cdio_open(psz_path, DRIVER_UNKNOWN);
   if (!p_udf->cdio) {
@@ -585,19 +586,18 @@ udf_opendir(const udf_dirent_t *p_udf_dirent)
 {
   if (p_udf_dirent->b_dir && !p_udf_dirent->b_parent && p_udf_dirent->fid) {
     udf_t *p_udf = p_udf_dirent->p_udf;
-    uint8_t data[UDF_BLOCKSIZE];
-    udf_file_entry_t *p_udf_fe = (udf_file_entry_t *) &data;
+    udf_file_entry_t udf_fe;
     
     driver_return_code_t i_ret = 
-      udf_read_sectors(p_udf, p_udf_fe, p_udf->i_part_start 
+      udf_read_sectors(p_udf, &udf_fe, p_udf->i_part_start 
 		       + p_udf_dirent->fid->icb.loc.lba, 1);
 
     if (DRIVER_OP_SUCCESS == i_ret 
-	&& !udf_checktag(&p_udf_fe->tag, TAGID_FILE_ENTRY)) {
+	&& !udf_checktag(&udf_fe.tag, TAGID_FILE_ENTRY)) {
       
-      if (ICBTAG_FILE_TYPE_DIRECTORY == p_udf_fe->icb_tag.file_type) {
+      if (ICBTAG_FILE_TYPE_DIRECTORY == udf_fe.icb_tag.file_type) {
 	udf_dirent_t *p_udf_dirent_new = 
-	  udf_new_dirent(p_udf_fe, p_udf, p_udf_dirent->psz_name, true, true);
+	  udf_new_dirent(&udf_fe, p_udf, p_udf_dirent->psz_name, true, true);
 	return p_udf_dirent_new;
       }
     }
@@ -661,16 +661,10 @@ udf_readdir(udf_dirent_t *p_udf_dirent)
 
       {
 	const unsigned int i_len = p_udf_dirent->fid->i_file_id;
-	uint8_t data[UDF_BLOCKSIZE] = {0};
-	udf_file_entry_t *p_udf_fe = (udf_file_entry_t *) &data;
 
-	if (DRIVER_OP_SUCCESS != udf_read_sectors(p_udf, p_udf_fe, p_udf->i_part_start 
+	if (DRIVER_OP_SUCCESS != udf_read_sectors(p_udf, &p_udf_dirent->fe, p_udf->i_part_start 
 			 + p_udf_dirent->fid->icb.loc.lba, 1))
 		return NULL;
-      
-	memcpy(&(p_udf_dirent->fe), p_udf_fe, 
-	       sizeof(udf_file_entry_t) + p_udf_fe->i_alloc_descs 
-	       + p_udf_fe->i_extended_attr );
 
 	if (strlen(p_udf_dirent->psz_name) < i_len) 
 	  p_udf_dirent->psz_name = (char *)
