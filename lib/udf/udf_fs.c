@@ -236,7 +236,10 @@ udf_fopen(udf_dirent_t *p_udf_root, const char *psz_name)
   if (p_udf_root) {
     char tokenline[udf_MAX_PATHLEN];
     char *psz_token;
-    
+
+    /* file position must be reset when accessing a new file */
+    p_udf_root->p_udf->i_position = 0;
+
     strncpy(tokenline, psz_name, udf_MAX_PATHLEN);
     psz_token = strtok(tokenline, udf_PATH_DELIMITERS);
     if (psz_token) {
@@ -612,7 +615,10 @@ udf_readdir(udf_dirent_t *p_udf_dirent)
     return NULL;
   }
 
+  /* file position must be reset when accessing a new file */
   p_udf = p_udf_dirent->p_udf;
+  p_udf->i_position = 0;
+
   if (p_udf_dirent->fid) { 
     /* advance to next File Identifier Descriptor */
     /* FIXME: need to advance file entry (fe) as well.  */
