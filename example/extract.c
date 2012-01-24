@@ -20,6 +20,13 @@
    TODO: timestamp preservation, file permissions, Unicode
  */
 
+/* To handle files > 2 GB, we may need the Large File Support settings
+   defined in config.h. Comes first, as stdio.h depends on it. */
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+# define __CDIO_CONFIG_H__ 1
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
@@ -100,7 +107,7 @@ static int udf_extract_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent, const cha
         }
         fwrite(buf, (size_t)MIN(i_file_length, i_read), 1, fd);
         if (ferror(fd)) {
-          fprintf(stderr, "  Error writing file\n");
+          fprintf(stderr, "  Error writing file: %s\n", strerror(errno));
           goto out;
         }
         i_file_length -= i_read;
@@ -174,7 +181,7 @@ static int iso_extract_files(iso9660_t* p_iso, const char *psz_path)
         }
         fwrite(buf, (size_t)MIN(i_file_length, ISO_BLOCKSIZE), 1, fd);
         if (ferror(fd)) {
-          fprintf(stderr, "  Error writing file\n");
+          fprintf(stderr, "  Error writing file: %s\n", strerror(errno));
           goto out;
         }
         i_file_length -= ISO_BLOCKSIZE;
@@ -207,6 +214,11 @@ int main(int argc, char** argv)
   if (argc < 3) {
     fprintf(stderr, "Usage: extract <iso_image> <extraction_dir>\n");
     return 1;
+  }
+  
+  /* Warn if LFS doesn't appear to be enabled */
+  if (sizeof(off_t) < 8) {
+    fprintf(stderr, "INFO: Large File Support not detected (required for files >2GB)\n");
   }
 
   psz_extract_dir = argv[2];
