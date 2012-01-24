@@ -157,7 +157,6 @@ AC_SUBST(DIFF_OPTS)
 
 dnl check for large file support
 AC_SYS_LARGEFILE
-AC_FUNC_FSEEKO
 
 dnl we need to define _FILE_OFFSET_BITS or _LARGE_FILES on the compiler command
 dnl line because otherwise the system headers risk being included before
