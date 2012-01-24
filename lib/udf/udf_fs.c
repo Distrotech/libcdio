@@ -312,14 +312,21 @@ udf_new_dirent(udf_file_entry_t *p_udf_fe, udf_t *p_udf,
 */
 driver_return_code_t
 udf_read_sectors (const udf_t *p_udf, void *ptr, lsn_t i_start, 
-		 long int i_blocks) 
+		 long i_blocks) 
 {
   driver_return_code_t ret;
-  long int i_read;
-  long int i_byte_offset;
+  long i_read;
+  off_t i_byte_offset;
   
   if (!p_udf) return 0;
-  i_byte_offset = (i_start * UDF_BLOCKSIZE);
+  /* Without the cast, i_start * UDF_BLOCKSIZE may be evaluated as 32 bit */
+  i_byte_offset = ((off_t)i_start) * UDF_BLOCKSIZE;
+  /* Since we're using SEEK_SET, the value must be positive */
+  if (i_byte_offset < 0) {
+    if (sizeof(off_t) <= 4)	/* probably missing LFS */
+      cdio_warn("Large File Support is required to access streams of 2 GB or more");
+    return DRIVER_OP_BAD_PARAMETER;
+  }
 
   if (p_udf->b_stream) {
     ret = cdio_stream_seek (p_udf->stream, i_byte_offset, SEEK_SET);

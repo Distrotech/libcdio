@@ -43,7 +43,7 @@ struct _CdioDataSource {
   void* user_data;
   cdio_stream_io_functions op;
   int is_open;
-  long position;
+  off_t position;
 };
 
 void
@@ -169,7 +169,7 @@ cdio_stream_read(CdioDataSource_t* p_obj, void *ptr, long size, long nmemb)
   the global variable errno is set to indicate the error.
 */
 ssize_t
-cdio_stream_seek(CdioDataSource_t* p_obj, ssize_t offset, int whence)
+cdio_stream_seek(CdioDataSource_t* p_obj, off_t offset, int whence)
 {
   if (!p_obj) return DRIVER_OP_UNINIT;
 
@@ -178,10 +178,11 @@ cdio_stream_seek(CdioDataSource_t* p_obj, ssize_t offset, int whence)
     return DRIVER_OP_ERROR;
 
   if (offset < 0) return DRIVER_OP_ERROR;
+  if (p_obj->position < 0) return DRIVER_OP_ERROR;
 
   if (p_obj->position != offset) {
 #ifdef STREAM_DEBUG
-    cdio_warn("had to reposition DataSource from %ld to %ld!", obj->position, offset);
+    cdio_warn("had to reposition DataSource from %ld to %ld!", p_obj->position, offset);
 #endif
     p_obj->position = offset;
     return p_obj->op.seek(p_obj->user_data, offset, whence);

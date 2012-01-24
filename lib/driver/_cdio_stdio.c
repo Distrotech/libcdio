@@ -37,6 +37,17 @@
 #include "_cdio_stream.h"
 #include "_cdio_stdio.h"
 
+/* On 32 bit platforms, fseek can only access streams of 2 GB or less.
+   Prefer fseeko, which takes a 64 bit off_t when LFS is enabled */
+#ifdef HAVE_FSEEKO
+# define STDIO_SEEK fseeko
+#else
+# define STDIO_SEEK fseek
+#endif
+
+#define _STRINGIFY(a) #a
+#define STRINGIFY(a) _STRINGIFY(a)
+
 static const char _rcsid[] = "$Id: _cdio_stdio.c,v 1.6 2008/04/22 15:29:11 karl Exp $";
 
 #define CDIO_STDIO_BUFSIZE (128*1024)
@@ -109,12 +120,12 @@ _stdio_free(void *user_data)
   indicate the error.
 */
 static driver_return_code_t 
-_stdio_seek(void *p_user_data, long i_offset, int whence)
+_stdio_seek(void *p_user_data, off_t i_offset, int whence)
 {
   _UserData *const ud = p_user_data;
 
-  if ( (i_offset=fseek (ud->fd, i_offset, whence)) ) {
-    cdio_error ("fseek (): %s", strerror (errno));
+  if ( (i_offset=STDIO_SEEK (ud->fd, i_offset, whence)) ) {
+    cdio_error ( STRINGIFY(STDIO_SEEK) " (): %s", strerror (errno));
   }
 
   return i_offset;

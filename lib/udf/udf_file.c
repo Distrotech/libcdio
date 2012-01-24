@@ -115,7 +115,12 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
     &p_udf_dirent->fe;
   const udf_icbtag_t *p_icb_tag = &p_udf_fe->icb_tag;
   const uint16_t strat_type= uint16_from_le(p_icb_tag->strat_type);
-  
+
+  if (i_offset < 0) {
+    cdio_warn("Negative offset value");
+    return CDIO_INVALID_LBA;
+  }
+
   switch (strat_type) {
   case 4096:
     printf("Cannot deal with strategy4096 yet!\n");
@@ -123,8 +128,8 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
     break;
   case ICBTAG_STRATEGY_TYPE_4:
     {
-      uint32_t icblen = 0;
-      lba_t lsector;
+      off_t icblen = 0;
+      uint64_t lsector;
       int ad_offset, ad_num = 0;
       uint16_t addr_ilk = uint16_from_le(p_icb_tag->flags&ICBTAG_FLAG_AD_MASK);
       
@@ -199,8 +204,12 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
 	printf("Unsupported allocation descriptor %d\n", addr_ilk);
 	return CDIO_INVALID_LBA;
       }
-      
-      *pi_lba = lsector + p_udf->i_part_start;
+
+      *pi_lba = (lba_t)lsector + p_udf->i_part_start;
+      if (*pi_lba < 0) {
+	cdio_warn("Negative LBA value");
+	return CDIO_INVALID_LBA;
+      }
       return *pi_lba;
     }
   default:
