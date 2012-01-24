@@ -247,6 +247,7 @@ try_iso:
   p_iso = iso9660_open(argv[1]);
   if (p_iso == NULL) {
     fprintf(stderr, "Unable to open image '%s'.\n", argv[1]);
+    r = 1;
     goto out;
   }
 

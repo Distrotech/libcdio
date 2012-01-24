@@ -1,6 +1,5 @@
-#   $Id: check_common_fn.in,v 1.14 2008/10/17 01:51:43 rocky Exp $
-#
-#   Copyright (C) 2003, 2004, 2005, 2006, 2008 Rocky Bernstein <rocky@gnu.org>
+#   Copyright (C) 2003, 2004, 2005, 2006, 2008, 2012
+#   Rocky Bernstein <rocky@gnu.org>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -32,7 +31,7 @@ check_result() {
   cmdline=$*
   if test $RC -ne 0 ; then 
     if test $RC -ne $SKIP_TEST_EXITCODE ; then
-      echo "$0: $msg failed in comparing output."
+      echo "$0: $msg failed."
       if test -n "$cmdline" ; then 
         echo "$0: failed command:"
         echo "	$cmdline"
