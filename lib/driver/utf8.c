@@ -40,6 +40,7 @@
 #endif
 
 #include <cdio/utf8.h>
+#include <cdio/logging.h>
 
 #include <stdio.h>
 
@@ -142,13 +143,13 @@ do_convert(iconv_t cd, char * src, int src_len,
           ret = realloc(ret, alloc_size);
           if (ret == NULL)
             {
-            fprintf(stderr, "Can't realloc(%d).\n", alloc_size);
+            cdio_warn("Can't realloc(%d).", alloc_size);
             return false;
             }
           outbuf = ret + output_pos;
           break;
         default:
-          fprintf(stderr, "Iconv failed: %s\n", strerror(errno));
+          cdio_warn("Iconv failed: %s", strerror(errno));
           if (ret != NULL)
             free(ret);
           return false;

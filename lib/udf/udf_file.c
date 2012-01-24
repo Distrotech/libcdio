@@ -123,7 +123,7 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
 
   switch (strat_type) {
   case 4096:
-    printf("Cannot deal with strategy4096 yet!\n");
+    cdio_warn("Cannot deal with strategy4096 yet!");
     return CDIO_INVALID_LBA;
     break;
   case ICBTAG_STRATEGY_TYPE_4:
@@ -146,7 +146,7 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
 	    i_offset -= icblen;
 	    ad_offset = sizeof(udf_short_ad_t) * ad_num;
 	    if (ad_offset > uint32_from_le(p_udf_fe->i_alloc_descs)) {
-	      printf("File offset out of bounds\n");
+	      cdio_warn("File offset out of bounds");
 	      return CDIO_INVALID_LBA;
 	    }
 	    p_icb = (udf_short_ad_t *) 
@@ -173,7 +173,7 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
 	    i_offset -= icblen;
 	    ad_offset = sizeof(udf_long_ad_t) * ad_num;
 	    if (ad_offset > uint32_from_le(p_udf_fe->i_alloc_descs)) {
-	      printf("File offset out of bounds\n");
+	      cdio_warn("File offset out of bounds");
 	      return CDIO_INVALID_LBA;
 	    }
 	    p_icb = (udf_long_ad_t *) 
@@ -195,13 +195,13 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
 	 * allocation descriptor field of the file entry.
 	 */
 	*pi_max_size = 0;
-	printf("Don't know how to data in ICB handle yet\n");
+	cdio_warn("Don't know how to data in ICB handle yet");
 	return CDIO_INVALID_LBA;
       case ICBTAG_FLAG_AD_EXTENDED:
-	printf("Don't know how to handle extended addresses yet\n");
+	cdio_warn("Don't know how to handle extended addresses yet");
 	return CDIO_INVALID_LBA;
       default:
-	printf("Unsupported allocation descriptor %d\n", addr_ilk);
+	cdio_warn("Unsupported allocation descriptor %d", addr_ilk);
 	return CDIO_INVALID_LBA;
       }
 
@@ -213,7 +213,7 @@ offset_to_lba(const udf_dirent_t *p_udf_dirent, off_t i_offset,
       return *pi_lba;
     }
   default:
-    printf("Unknown strategy type %d\n", strat_type);
+    cdio_warn("Unknown strategy type %d", strat_type);
     return DRIVER_OP_ERROR;
   }
 }
@@ -246,9 +246,9 @@ udf_read_block(const udf_dirent_t *p_udf_dirent, void * buf, size_t count)
     if (i_lba != CDIO_INVALID_LBA) {
       uint32_t i_max_blocks = CEILING(i_max_size, UDF_BLOCKSIZE);
       if ( i_max_blocks < count ) {
-	  fprintf(stderr, "Warning: read count %u is larger than %u extent size.\n",
+	  cdio_warn("read count %u is larger than %u extent size.",
 		  count, i_max_blocks);
-	  fprintf(stderr, "Warning: read count truncated to %u\n", count);
+	  cdio_warn("read count truncated to %u", count);
 	  count = i_max_blocks;
       }
       ret = udf_read_sectors(p_udf, buf, i_lba, count);
