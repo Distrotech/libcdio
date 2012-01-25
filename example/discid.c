@@ -23,11 +23,10 @@
    interpret) about compact audio discs from a CDDB-Server.
 */
 
-#include <stdio.h>
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
 #include <cdio/cdio.h>
+#ifdef HAVE_STDIO_H
+#include <stdio.h>
+#endif
 
 static int cddb_sum(int n)
 {
