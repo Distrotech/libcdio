@@ -37,8 +37,8 @@
 #include <limits.h>
 
 #include <sys/stat.h>
-#include <sys/types.h>
 
+#include <cdio/types.h>
 #include <cdio/sector.h>
 #include <cdio/util.h>
 #include <cdio/logging.h>

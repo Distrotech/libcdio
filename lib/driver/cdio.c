@@ -23,7 +23,6 @@
 # define __CDIO_CONFIG_H__ 1
 #endif
 
-#include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

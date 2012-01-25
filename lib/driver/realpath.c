@@ -40,16 +40,17 @@
 # include <stdlib.h>
 #endif
 
-#include <stdio.h>
+#ifdef HAVE_STDIO_H
+# include <stdio.h>
+#endif
 
 #ifdef HAVE_STRING_H
 # include <string.h>
 #endif
 
-#ifdef HAVE_UNISTD_H // readlink
+#ifdef HAVE_UNISTD_H  /* readlink */
 # include <unistd.h>
 #endif
-
 
 #ifdef HAVE_INTTYPES_H
 # include "inttypes.h"

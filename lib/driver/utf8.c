@@ -42,7 +42,9 @@
 #include <cdio/utf8.h>
 #include <cdio/logging.h>
 
+#ifdef HAVE_STDIO_H
 #include <stdio.h>
+#endif
 
 
 struct cdio_charset_coverter_s

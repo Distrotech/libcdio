@@ -20,23 +20,25 @@
 # include <unistd.h>
 #endif 
 
-#include <stdio.h>
+#ifdef HAVE_STDIO_H
+# include <stdio.h>
+#endif
 
 #ifndef PATH_MAX
-#define PATH_MAX 4096
+# define PATH_MAX 4096
 #endif
 
 #ifndef NULL
-#  define NULL 0
+# define NULL 0
 #endif
 
 #ifdef __CYGWIN__
-#undef DOSISH
+# undef DOSISH
 #endif
 #if defined __CYGWIN__ || defined DOSISH
-#define DOSISH_UNC
-#define DOSISH_DRIVE_LETTER
-#define FILE_ALT_SEPARATOR '\\'
+# define DOSISH_UNC
+# define DOSISH_DRIVE_LETTER
+# define FILE_ALT_SEPARATOR '\\'
 #endif
 
 #ifndef CDIO_FILE_SEPARATOR
@@ -44,13 +46,13 @@
 #endif
 
 #if defined __CYGWIN__ || defined DOSISH
-#  define FILE_ALT_SEPARATOR '\\'
+# define FILE_ALT_SEPARATOR '\\'
 #endif
 
 #ifdef CDIO_FILE_ALT_SEPARATOR
-#  define isdirsep(x) ((x) == CDIO_FILE_SEPARATOR || (x) == CDIO_FILE_ALT_SEPARATOR)
+# define isdirsep(x) ((x) == CDIO_FILE_SEPARATOR || (x) == CDIO_FILE_ALT_SEPARATOR)
 #else
-#  define isdirsep(x) ((x) == CDIO_FILE_SEPARATOR)
+# define isdirsep(x) ((x) == CDIO_FILE_SEPARATOR)
 #endif
 
 #define skipprefix(path) (path)

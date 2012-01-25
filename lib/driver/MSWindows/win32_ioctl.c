@@ -43,7 +43,6 @@
 #include <stddef.h>  /* offsetof() macro */
 #include <sys/stat.h>
 #include <errno.h>
-#include <sys/types.h>
 
 #include <cdio/cdio.h>
 #include <cdio/sector.h>
