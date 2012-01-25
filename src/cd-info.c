@@ -24,8 +24,10 @@
 
 #include "util.h"
 #include "getopt.h"
-#include <stdarg.h>
 
+#ifdef HAVE_STDARG_H
+#include <stdarg.h>
+#endif
 #ifdef HAVE_STRINGS_H
 #include <strings.h>
 #endif
@@ -51,7 +53,9 @@
 
 #include "cdio_assert.h"
 
+#ifdef HAVE_FCNTL_H
 #include <fcntl.h>
+#endif
 #ifdef __linux__
 # include <linux/version.h>
 # include <linux/cdrom.h>
@@ -59,8 +63,10 @@
 #  include <linux/ucdrom.h>
 # endif
 #endif
- 
+
+#ifdef HAVE_ERRNO_H 
 #include <errno.h>
+#endif
 
 #define STRONG "__________________________________\n"
 #define NORMAL ""

@@ -25,12 +25,12 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <sys/types.h>
 #include <cdio/cdio.h>
 #include <cdio/iso9660.h>
 
+#ifdef HAVE_STDIO_H
 #include <stdio.h>
-
+#endif
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
 #endif
@@ -39,9 +39,6 @@
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
 #endif
 
 #include "getopt.h"

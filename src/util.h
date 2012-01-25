@@ -25,11 +25,12 @@
 # define __CDIO_CONFIG_H__ 1
 #endif
 
-#include <stdio.h>
-#include <sys/types.h>
 #include <cdio/cdio.h>
 #include <cdio/logging.h>
 #include <cdio/iso9660.h>
+#ifdef HAVE_STDIO_H
+#include <stdio.h>
+#endif
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif

@@ -32,21 +32,23 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-#include <sys/types.h>
 #include <cdio/bytesex.h>
 #include <cdio/cdio.h>
 #include <cdio/ds.h>
 #include <cdio/iso9660.h>
 
+#ifdef HAVE_STDIO_H
 #include <stdio.h>
+#endif
+#ifdef HAVE_ERRNO_H
 #include <errno.h>
+#endif
+#ifdef HAVE_STRING_H
 #include <string.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <sys/types.h>
-
-#include <errno.h>
 
 #if 0
 #define STRONG "\033[1m"
