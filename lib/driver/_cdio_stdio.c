@@ -123,6 +123,14 @@ static driver_return_code_t
 _stdio_seek(void *p_user_data, off_t i_offset, int whence)
 {
   _UserData *const ud = p_user_data;
+#ifndef HAVE_FSEEKO
+  /* Detect if off_t is lossy-truncated to long to avoid data corruption */
+  if ( (sizeof(off_t) > sizeof(long)) && (i_offset != (off_t)((long)i_offset)) ) {
+    cdio_error ( STRINGIFY(STDIO_SEEK) " (): lossy truncation detected!");
+    errno = EFBIG;
+    return DRIVER_OP_ERROR;
+  }
+#endif
 
   if ( (i_offset=STDIO_SEEK (ud->fd, i_offset, whence)) ) {
     cdio_error ( STRINGIFY(STDIO_SEEK) " (): %s", strerror (errno));

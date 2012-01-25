@@ -167,8 +167,6 @@ if test "x$ac_cv_sys_largefiles" = "xyes"; then
     else
         LIBCDIO_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
-    dnl AC_FUNC_FSEEKO sets HAVE_FSEEKO and $ac_cv_sys_largefile_source
-    AC_FUNC_FSEEKO
     if test "$ac_cv_sys_largefile_source" != no; then
         LIBCDIO_LARGEFILE_FLAGS="$LIBDDIO_LARGEFILE_FLAGS -D_LARGEFILE_SOURCE=$ac_cv_sys_largefile_source"
     fi
@@ -507,6 +505,19 @@ AC_CHECK_FUNCS( [bzero chdir drand48 ftruncate geteuid getgid \
 		 getuid getpwuid gettimeofday lstat memcpy memset rand \
 		 seteuid setegid snprintf setenv strndup unsetenv tzset \
 		 sleep usleep vsnprintf readlink realpath gmtime_r localtime_r] )
+
+# Check for fseeko() support (detection must not rely on LFS)
+AC_MSG_CHECKING([for fseeko])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h> /* for off_t */
+#endif
+#include <stdio.h>
+],[int (*fp) (FILE *, off_t, int) = fseeko;
+return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);])],
+[AC_MSG_RESULT(yes); AC_DEFINE(HAVE_FSEEKO, 1,
+		     [Define to 1 if you have the `fseeko' function.])],
+[AC_MSG_RESULT(no)])
 
 # check for timegm() support
 AC_CHECK_FUNC(timegm, AC_DEFINE(HAVE_TIMEGM,1,
