@@ -34,10 +34,6 @@ extern "C" {
 #include <cdio/cdio_config.h>
 #endif
 
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-
   /* provide some C99 definitions */
 
 #if defined(HAVE_SYS_TYPES_H) 

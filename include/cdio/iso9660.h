@@ -60,7 +60,7 @@ typedef uint64_t iso733_t; /*! See section 7.3.3 */
 typedef char     achar_t;  /*! See section 7.4.1 */
 typedef char     dchar_t;  /*! See section 7.4.1 */
 
-#ifndef  EMPTY_ARRAY_SIZE
+#ifndef EMPTY_ARRAY_SIZE
 #define EMPTY_ARRAY_SIZE 0
 #endif
 
