@@ -112,7 +112,8 @@ then
   *** This package has not been tested very well with non GNU compilers
   *** you should try to use 'gcc' for compiling this package.])
 else
-  WARN_CFLAGS="-Wall -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wunused -Wpointer-arith -Wwrite-strings -Wnested-externs -Wno-sign-compare"
+  ## TODO: remove '-Wconversion -Wno-sign-conversion' added for MinGW LFS implementation
+  WARN_CFLAGS="-Wall -Wconversion -Wno-sign-conversion -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wunused -Wpointer-arith -Wwrite-strings -Wnested-externs -Wno-sign-compare"
 
   for WOPT in $WARN_CFLAGS; do
     SAVE_CFLAGS="$CFLAGS"
@@ -342,8 +343,6 @@ LIBISO9660_LIBS='$(top_builddir)/lib/iso9660/libiso9660.la'
 LIBUDF_CFLAGS='-I$(top_srcdir)/lib/udf/'
 LIBUDF_LIBS='$(top_builddir)/lib/udf/libudf.la'
 AC_SUBST(LIBCDIO_CDDA_LIBS)
-AC_SUBST(LIBCDIO_CFLAGS)
-AC_SUBST(LIBISO9660_CFLAGS)
 AC_SUBST(LIBISO9660PP_LIBS)
 AC_SUBST(LIBCDIO_LIBS)
 AC_SUBST(LIBCDIOPP_LIBS)
@@ -434,11 +433,18 @@ int has_timeout=sizeof(test.timeout);],
 	AC_CHECK_HEADERS(windows.h)
 	AC_DEFINE([MINGW32], [1], 
                   [Define 1 if you are compiling using MinGW])
-     	AC_DEFINE([HAVE_WIN32_CDROM], [1], 
+	AC_DEFINE([HAVE_WIN32_CDROM], [1], 
                   [Define 1 if you have MinGW CD-ROM support])
- 	LIBS="$LIBS -lwinmm"
- 	LT_NO_UNDEFINED="-no-undefined"
-  	cd_drivers="${cd_drivers}, MinGW "
+	LIBS="$LIBS -lwinmm"
+	LT_NO_UNDEFINED="-no-undefined"
+	cd_drivers="${cd_drivers}, MinGW "
+	## Cross-platform LFS support in MinGW32 requires an override of <sys/types.h>
+	if test "$enable_largefile" != no; then
+	  ## TODO: check precedence to ensure our sys/types.h comes first?
+	  AC_MSG_RESULT([enabling support for large files (_FILE_OFFSET_BITS=64)])
+	  LIBCDIO_CFLAGS+=' -I$(top_srcdir)/include/override/ -D_FILE_OFFSET_BITS=64'
+	  LIBISO9660_CFLAGS+=' -I$(top_srcdir)/include/override/ -D_FILE_OFFSET_BITS=64'
+	fi
 	;;
      freebsd4.*|freebsd5.*|freebsd[6-9]*|dragonfly*|kfreebsd*)
      	AC_DEFINE([HAVE_FREEBSD_CDROM], [1], 
@@ -465,6 +471,8 @@ int has_timeout=sizeof(test.timeout);],
 	;;
 esac
 
+AC_SUBST(LIBCDIO_CFLAGS)
+AC_SUBST(LIBISO9660_CFLAGS)
 AC_SUBST(LT_NO_UNDEFINED)
 
 AC_MSG_CHECKING(extern long timezone variable)
