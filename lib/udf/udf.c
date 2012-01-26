@@ -54,7 +54,11 @@ udf_get_posix_filemode(const udf_dirent_t *p_udf_dirent)
 
   if (udf_get_file_entry(p_udf_dirent, &udf_fe)) {
     uint32_t i_perms;
+#ifdef S_ISUID
+    uint16_t i_flags;
 
+    i_flags = uint16_from_le(udf_fe.icb_tag.flags);
+#endif
     i_perms = uint32_from_le(udf_fe.permissions);
 
     if (i_perms & FE_PERM_U_READ)  mode |= S_IRUSR;
