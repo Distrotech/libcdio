@@ -1113,7 +1113,7 @@ main(int argc, char *argv[])
     if (i_read_cap & CDIO_DRIVE_CAP_READ_ISRC) {
       driver_return_code_t status;
       for (i = 1; i <= i_tracks; i++) {
-        bzero(&isrc, sizeof(isrc));
+        memset (&isrc, 0, sizeof(isrc));
         status = mmc_isrc_track_read_subchannel (p_cdio, i, isrc);
         if (status == DRIVER_OP_SUCCESS && isrc[0] != '\0') {
           report(stdout, "TRACK %2d ISRC: %s\n", i, isrc); fflush(stdout);
