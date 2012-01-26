@@ -1165,6 +1165,7 @@ close_tray_solaris (const char *psz_device)
 #endif /*HAVE_SOLARIS_CDROM*/
 }
 
+#ifdef HAVE_SOLARIS_CDROM
 /*!
   Return an array of strings giving possible CD devices.
   New method after demise of vold in 2006. 
@@ -1174,9 +1175,6 @@ close_tray_solaris (const char *psz_device)
 static char **
 cdio_get_devices_solaris_cXtYdZs2(int flag)
 {
-#ifndef HAVE_SOLARIS_CDROM
-  return NULL;
-#else
   int busno, tgtno, lunno, ret;
   char volpath[160];
   char **drives = NULL;
@@ -1273,8 +1271,8 @@ ex:;
     closedir(dir);
   cdio_add_device_list(&drives, NULL, &i_files);
   return drives;
-#endif /*HAVE_SOLARIS_CDROM*/
 }
+#endif /*HAVE_SOLARIS_CDROM*/
 
 /*!
   Return an array of strings giving possible CD devices.

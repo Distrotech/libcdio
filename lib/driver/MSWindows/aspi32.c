@@ -784,7 +784,6 @@ get_track_format_aspi(const _img_private_t *p_env, track_t track_num)
   MCI_OPEN_PARMS op;
   MCI_STATUS_PARMS st;
   DWORD i_flags;
-  int ret;
 
   memset( &op, 0, sizeof(MCI_OPEN_PARMS) );
   op.lpstrDeviceType = (LPCSTR)MCI_DEVTYPE_CD_AUDIO;
@@ -798,7 +797,7 @@ get_track_format_aspi(const _img_private_t *p_env, track_t track_num)
     st.dwItem  = MCI_CDA_STATUS_TYPE_TRACK;
     st.dwTrack = track_num;
     i_flags = MCI_TRACK | MCI_STATUS_ITEM ;
-    ret = mciSendCommand_aspi( op.wDeviceID, MCI_STATUS, i_flags, &st );
+    mciSendCommand_aspi( op.wDeviceID, MCI_STATUS, i_flags, &st );
     
     /* Release access to the device */
     mciSendCommand_aspi( op.wDeviceID, MCI_CLOSE, MCI_WAIT, 0 );

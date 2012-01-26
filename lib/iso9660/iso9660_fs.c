@@ -1014,7 +1014,6 @@ _fs_stat_traverse (const CdIo_t *p_cdio, const iso9660_stat_t *_root,
 	   && yep != p_stat->rr.b3_rock ) {
 	char *trans_fname = NULL;
 	unsigned int i_trans_fname=strlen(p_stat->filename);
-	int trans_len;
 	
 	if (i_trans_fname) {
 	  trans_fname = calloc(1, i_trans_fname+1);
@@ -1024,8 +1023,8 @@ _fs_stat_traverse (const CdIo_t *p_cdio, const iso9660_stat_t *_root,
 	    free(p_stat);
 	    return NULL;
 	  }
-	  trans_len = iso9660_name_translate_ext(p_stat->filename, trans_fname,
-						 p_env->i_joliet_level);
+	  iso9660_name_translate_ext(p_stat->filename, trans_fname,
+				     p_env->i_joliet_level);
 	  cmp = strcmp(splitpath[0], trans_fname);
 	  free(trans_fname);
 	}
@@ -1114,7 +1113,6 @@ _fs_iso_stat_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
 	   && yep != p_stat->rr.b3_rock ) {
 	char *trans_fname = NULL;
 	unsigned int i_trans_fname=strlen(p_stat->filename);
-	int trans_len;
 	
 	if (i_trans_fname) {
 	  trans_fname = calloc(1, i_trans_fname+1);
@@ -1124,8 +1122,8 @@ _fs_iso_stat_traverse (iso9660_t *p_iso, const iso9660_stat_t *_root,
 	    free(p_stat);
 	    return NULL;
 	  }
-	  trans_len = iso9660_name_translate_ext(p_stat->filename, trans_fname, 
-						 p_iso->i_joliet_level);
+	  iso9660_name_translate_ext(p_stat->filename, trans_fname, 
+				     p_iso->i_joliet_level);
 	  cmp = strcmp(splitpath[0], trans_fname);
 	  free(trans_fname);
 	}

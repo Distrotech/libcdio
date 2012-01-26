@@ -683,8 +683,6 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 		 || 0 == strcmp ("AUDIOFILE", psz_keyword)) {
 	if (0 <= i) {
 	  if (NULL != (psz_field = strtok (NULL, "\"\t\n\r"))) {
-	    off_t i_size;
-
 	    /* Handle "<filename>" */
 	    if (cd) {
 	      const char *dirname = cdio_dirname(psz_cue_name);
@@ -697,7 +695,6 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 			   psz_cue_name, i_line, psz_field);
 		goto err_exit;
 	      }
-	      i_size = cdio_stream_stat(cd->tocent[i].data_source);
 	    } else {
 	      CdioDataSource_t *s = cdio_stdio_new (psz_field);
 	      if (!s) {
@@ -706,7 +703,6 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 			  psz_cue_name, i_line, psz_field);
 		goto err_exit;
 	      }
-	      i_size = cdio_stream_stat(s);
 	      cdio_stdio_destroy (s);
 	    }
 	  }

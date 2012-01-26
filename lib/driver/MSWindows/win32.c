@@ -596,7 +596,6 @@ open_close_media_win32 (const char *psz_win32_drive, DWORD command_flags)
   return DRIVER_OP_UNSUPPORTED;
 #else
   MCI_OPEN_PARMS op;
-  MCI_STATUS_PARMS st;
   DWORD i_flags;
   int ret;
     
@@ -609,7 +608,6 @@ open_close_media_win32 (const char *psz_win32_drive, DWORD command_flags)
     MCI_OPEN_ELEMENT | MCI_OPEN_SHAREABLE;
   
   if( _cdio_mciSendCommand( 0, MCI_OPEN, i_flags, &op ) ) {
-    st.dwItem = MCI_STATUS_READY;
     /* Eject disc */
     ret = _cdio_mciSendCommand( op.wDeviceID, MCI_SET, command_flags, 0 ) == 0;
     /* Release access to the device */

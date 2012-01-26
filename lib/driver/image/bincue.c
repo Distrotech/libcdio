@@ -334,7 +334,6 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
     if(NULL != (psz_field = strtok (NULL, "\"\t\n\r"))) {
       if (cd) {
         uint8_t cdt_data[MAX_CDTEXT_DATA_LENGTH+4];
-        uint8_t *ptr;
         int size;
         CdioDataSource_t *source;
 
@@ -351,11 +350,8 @@ parse_cuefile (_img_private_t *cd, const char *psz_cue_name)
 
         /* cut header */
         if (cdt_data[0] > 0x80) {
-          ptr = &cdt_data[4];
           size -= 4;
         }
-        else
-          ptr = cdt_data;
 
         /* init cdtext */
         if (NULL == cd->gen.cdtext) {
