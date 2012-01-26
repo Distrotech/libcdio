@@ -112,8 +112,7 @@ then
   *** This package has not been tested very well with non GNU compilers
   *** you should try to use 'gcc' for compiling this package.])
 else
-  ## TODO: remove '-Wconversion -Wno-sign-conversion' added for MinGW LFS implementation
-  WARN_CFLAGS="-Wall -Wconversion -Wno-sign-conversion -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wunused -Wpointer-arith -Wwrite-strings -Wnested-externs -Wno-sign-compare"
+  WARN_CFLAGS="-Wall -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wunused -Wpointer-arith -Wwrite-strings -Wnested-externs -Wno-sign-compare"
 
   for WOPT in $WARN_CFLAGS; do
     SAVE_CFLAGS="$CFLAGS"
@@ -438,12 +437,11 @@ int has_timeout=sizeof(test.timeout);],
 	LIBS="$LIBS -lwinmm"
 	LT_NO_UNDEFINED="-no-undefined"
 	cd_drivers="${cd_drivers}, MinGW "
-	## Cross-platform LFS support in MinGW32 requires an override of <sys/types.h>
+	## Cross-platform LFS support in MinGW requires an override of off_t
 	if test "$enable_largefile" != no; then
-	  ## TODO: check precedence to ensure our sys/types.h comes first?
 	  AC_MSG_RESULT([enabling support for large files (_FILE_OFFSET_BITS=64)])
-	  LIBCDIO_CFLAGS+=' -I$(top_srcdir)/include/override/ -D_FILE_OFFSET_BITS=64'
-	  LIBISO9660_CFLAGS+=' -I$(top_srcdir)/include/override/ -D_FILE_OFFSET_BITS=64'
+	  LIBCDIO_CFLAGS+=' -D_FILE_OFFSET_BITS=64 -D_OFF_T_DEFINED -D_OFF_T_ -D_off_t=off64_t -Doff_t=off64_t'
+	  LIBISO9660_CFLAGS+=' -D_FILE_OFFSET_BITS=64 -D_OFF_T_DEFINED -D_OFF_T_ -D_off_t=off64_t -Doff_t=off64_t'
 	fi
 	;;
      freebsd4.*|freebsd5.*|freebsd[6-9]*|dragonfly*|kfreebsd*)
@@ -509,23 +507,10 @@ AC_DEFINE_UNQUOTED(LIBCDIO_SOURCE_PATH, "$LIBCDIO_SOURCE_PATH",
 	[Full path to libcdio top_sourcedir.])
 AC_SUBST(LIBCDIO_SOURCE_PATH)
 
-AC_CHECK_FUNCS( [bzero chdir drand48 ftruncate geteuid getgid \
-		 getuid getpwuid gettimeofday lstat memcpy memset rand \
-		 seteuid setegid snprintf setenv strndup unsetenv tzset \
-		 sleep usleep vsnprintf readlink realpath gmtime_r localtime_r] )
-
-# Check for fseeko() support (detection must not rely on LFS)
-AC_MSG_CHECKING([for fseeko])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h> /* for off_t */
-#endif
-#include <stdio.h>
-],[int (*fp) (FILE *, off_t, int) = fseeko;
-return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);])],
-[AC_MSG_RESULT(yes); AC_DEFINE(HAVE_FSEEKO, 1,
-		     [Define to 1 if you have the `fseeko' function.])],
-[AC_MSG_RESULT(no)])
+AC_CHECK_FUNCS( [bzero chdir drand48 fseeko fseeko64 ftruncate geteuid getgid \
+		 getuid getpwuid gettimeofday lseek64 lstat memcpy memset rand \
+		 seteuid setegid snprintf setenv strndup unsetenv tzset sleep \
+		 _stati64 usleep vsnprintf readlink realpath gmtime_r localtime_r] )
 
 # check for timegm() support
 AC_CHECK_FUNC(timegm, AC_DEFINE(HAVE_TIMEGM,1,
