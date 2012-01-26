@@ -132,7 +132,7 @@ mciSendCommand_aspi(int id, UINT msg, DWORD flags, void *arg)
 {
   MCIERROR mci_error;
   
-  mci_error = mciSendCommand(id, msg, flags, (DWORD)arg);
+  mci_error = mciSendCommand(id, msg, flags, (DWORD_PTR)arg);
   if ( mci_error ) {
     char error[256];
     
@@ -444,7 +444,7 @@ init_aspi (_img_private_t *env)
                 if( ( srbGDEVBlock.SRB_Status == SS_COMP ) &&
                     ( srbGDEVBlock.SRB_DeviceType == DTYPE_CDROM ) ) {
                   env->i_sid = MAKEWORD( i_adapter, i_target );
-                  env->hASPI = (long)hASPI;
+                  env->hASPI = hASPI;
                   env->lpSendCommand = lpSendCommand;
                   env->b_aspi_init   = true;
                   env->i_lun         = i_lun;

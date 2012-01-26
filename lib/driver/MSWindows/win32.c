@@ -198,7 +198,7 @@ _cdio_mciSendCommand(int id, UINT msg, DWORD flags, void *arg)
 #else
   MCIERROR mci_error;
   
-  mci_error = mciSendCommand(id, msg, flags, (DWORD)arg);
+  mci_error = mciSendCommand(id, msg, flags, (DWORD_PTR)arg);
   if ( mci_error ) {
     char error[256];
     
@@ -356,7 +356,7 @@ free_win32 (void *p_user_data)
   if( p_env->h_device_handle )
     CloseHandle( p_env->h_device_handle );
   if( p_env->hASPI )
-    FreeLibrary( (HMODULE)p_env->hASPI );
+    FreeLibrary( p_env->hASPI );
 
   free (p_env);
 }
