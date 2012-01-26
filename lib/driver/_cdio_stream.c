@@ -88,8 +88,8 @@ cdio_stream_destroy(CdioDataSource_t *p_obj)
   @return unpon successful completion, return value is positive, else,
   the global variable errno is set to indicate the error.
 */
-ssize_t
-cdio_stream_getpos(CdioDataSource_t* p_obj, /*out*/ ssize_t *i_offset)
+off_t
+cdio_stream_getpos(CdioDataSource_t* p_obj, /*out*/ off_t *i_offset)
 {
   if (!p_obj || !p_obj->is_open) return DRIVER_OP_UNINIT;
   return *i_offset = p_obj->position;
@@ -148,7 +148,7 @@ _cdio_stream_open_if_necessary(CdioDataSource_t *p_obj)
   must use feof(3) and ferror(3) to determine which occurred.
 */
 ssize_t
-cdio_stream_read(CdioDataSource_t* p_obj, void *ptr, long size, long nmemb)
+cdio_stream_read(CdioDataSource_t* p_obj, void *ptr, size_t size, size_t nmemb)
 {
   long read_bytes;
 
@@ -176,7 +176,7 @@ cdio_stream_read(CdioDataSource_t* p_obj, void *ptr, long size, long nmemb)
   @return unpon successful completion, return value is positive, else,
   the global variable errno is set to indicate the error.
 */
-ssize_t
+int
 cdio_stream_seek(CdioDataSource_t* p_obj, off_t offset, int whence)
 {
   if (!p_obj) return DRIVER_OP_UNINIT;
@@ -203,7 +203,7 @@ cdio_stream_seek(CdioDataSource_t* p_obj, off_t offset, int whence)
   Return whatever size of stream reports, I guess unit size is bytes. 
   On error return -1;
  */
-ssize_t
+off_t
 cdio_stream_stat(CdioDataSource_t *p_obj)
 {
   if (!p_obj) return -1;
