@@ -27,6 +27,9 @@
 #ifdef HAVE_STDIO_H
 #include <stdio.h>
 #endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 
 static int cddb_sum(int n)
 {

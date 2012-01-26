@@ -33,6 +33,9 @@
 
 #include <cdio/version.h>
 #include <cdio/types.h>
+#ifdef  HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 #ifdef  HAVE_UNISTD_H
 #include <unistd.h>
 #endif

@@ -65,6 +65,10 @@ static const char _rcsid[] = "$Id: win32.c,v 1.37 2008/04/21 18:30:21 karl Exp $
 #include <sys/stat.h>
 #endif
 
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+
 #if defined (MSVC) || defined (_XBOX)
 #undef IN
 #else

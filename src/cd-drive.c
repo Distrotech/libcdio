@@ -21,6 +21,9 @@
 #ifdef HAVE_STDIO_H
 #include <stdio.h>
 #endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 #include "getopt.h"
 #include <cdio/cdio.h>
 #include <cdio/mmc.h>

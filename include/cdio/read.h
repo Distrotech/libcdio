@@ -27,6 +27,9 @@
 #define __CDIO_READ_H__
 
 #include <cdio/types.h>
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h> /* off_t, ssize_t */
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -36,9 +36,13 @@
 #include <fcntl.h>
 #include <limits.h>
 
+#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 
-#include <cdio/types.h>
 #include <cdio/sector.h>
 #include <cdio/util.h>
 #include <cdio/logging.h>

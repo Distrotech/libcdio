@@ -47,6 +47,7 @@
 #include "win32.h"
 
 #include <sys/stat.h>
+#include <sys/types.h>
 #include "aspi32.h"
 #include "cdtext_private.h"
 
