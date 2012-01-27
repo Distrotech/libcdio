@@ -20,12 +20,9 @@
    Regression test for MMC commands involving read/write access.
 */
 #ifdef HAVE_CONFIG_H
-# include "config.h"
-# define __CDIO_CONFIG_H__ 1
+#include "config.h"
+#define __CDIO_CONFIG_H__ 1
 #endif
-#include <cdio/cdio.h>
-#include <cdio/logging.h>
-#include <cdio/mmc_cmds.h>
 
 #ifdef HAVE_STDIO_H
 #include <stdio.h>
@@ -39,6 +36,10 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+
+#include <cdio/cdio.h>
+#include <cdio/logging.h>
+#include <cdio/mmc_cmds.h>
 
 #define SKIP_TEST 77
 
