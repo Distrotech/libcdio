@@ -23,27 +23,37 @@
 /* To handle files > 2 GB, we may need the Large File Support settings
    defined in config.h. Comes first, as stdio.h depends on it. */
 #ifdef HAVE_CONFIG_H
-# include "config.h"
-# define __CDIO_CONFIG_H__ 1
+#include "config.h"
+#define __CDIO_CONFIG_H__ 1
 #endif
 
+#ifdef HAVE_STDIO_H
 #include <stdio.h>
+#endif
+#ifdef HAVE_STRING_H
 #include <string.h>
-#include <malloc.h>
+#endif
+#ifdef HAVE_ERRNO_H
 #include <errno.h>
+#endif
+#include <malloc.h>
+
+#if defined(_WIN32)
+#include <direct.h>
+#else
+#ifdef HAVE_SYS_STAT_H
+#include <sys/stat.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#define _mkdir(a) mkdir(a, S_IRWXU)
+#endif
 
 #include <cdio/cdio.h>
 #include <cdio/logging.h>
 #include <cdio/iso9660.h>
 #include <cdio/udf.h>
-
-#if defined(_WIN32)
-#include <direct.h>
-#else
-#include <sys/stat.h>
-#include <sys/types.h>
-#define _mkdir(a) mkdir(a, S_IRWXU)
-#endif
 
 #ifndef MIN
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
