@@ -36,6 +36,10 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+#if !defined(HAVE_SLEEP) && defined(_WIN32)
+#include <windows.h>
+#define sleep Sleep
+#endif
 
 #include <cdio/cdio.h>
 #include <cdio/logging.h>
@@ -521,7 +525,7 @@ test_rwr_mode_page(CdIo_t *p_cdio, unsigned int i_flag)
     } else if (memcmp(buf, old_buf, i_size) != 0) {
 	fprintf(stderr,
 		"test_rwr_mode_page: Mode page was not restored to old state.\n");
-	final_return = -1;
+	final_return = final_return > 0 ? -1 : final_return;
     } 
     if (i_flag & 1)
 	printf("test_rwr_mode_page: Mode page 2Ah restored to previous state\n");

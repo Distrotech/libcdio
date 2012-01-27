@@ -36,6 +36,10 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+#if !defined(HAVE_SLEEP) && defined(_WIN32)
+#include <windows.h>
+#define sleep Sleep
+#endif
 
 #include <cdio/cdio.h>
 #include <cdio/logging.h>
