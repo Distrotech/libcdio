@@ -35,14 +35,16 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* MSYS 1.0.10 with MinGW 3.4.2 (and perhaps others) don't have
+/* MSYS 1.0.10 with MinGW 3.4.2 and MSVC don't have
    S_ISSOCK() or S_ISLNK() macros, so we'll roll our own. */
-#if !defined(HAVE_S_ISSOCK) && !defined(S_ISSOCK)
+#if defined(__MINGW32) || defined(_MSC_VER)
+#if !defined(S_ISSOCK)
 #define S_ISSOCK(st_mode) ((((st_mode)) & 0170000) == (0140000))
 #endif
 
-#if !defined(HAVE_S_ISLNK) && !defined(S_ISLNK)
+#if !defined(S_ISLNK)
 #define S_ISLNK(st_mode) ((((st_mode)) & 0170000) == (0010000))
+#endif
 #endif
 
 /*! An enumeration for some of the ISO_ROCK_* \#defines below. This isn't
