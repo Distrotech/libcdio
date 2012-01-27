@@ -36,6 +36,9 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 #if !defined(HAVE_SLEEP) && defined(_WIN32)
 #include <windows.h>
 #define sleep Sleep
