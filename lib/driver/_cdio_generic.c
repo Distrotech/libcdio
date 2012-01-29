@@ -57,9 +57,12 @@
 
 /* If available and LFS is enabled, try to use lseek64 */
 #if defined(HAVE_LSEEK64) && defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64)
-# define CDIO_LSEEK lseek64
+#if defined(_MSC_VER)
+#include <io.h>
+#define CDIO_LSEEK lseek64
+#endif
 #else
-# define CDIO_LSEEK lseek
+#define CDIO_LSEEK lseek
 #endif
 
 /*!
