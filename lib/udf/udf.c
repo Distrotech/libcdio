@@ -20,6 +20,7 @@
    say opensolaris. */
 #include "udf_private.h"
 #include <cdio/bytesex.h>
+#include "filemode.h"
 
 #ifdef HAVE_STRING_H
 # include <string.h>

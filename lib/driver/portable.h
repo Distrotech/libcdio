@@ -51,18 +51,4 @@
 # define drand48()   (rand() / (double)RAND_MAX)
 #endif
 
-#ifdef MSVC
-# include <io.h>
-
-# ifndef S_ISBLK
-#  define _S_IFBLK        0060000  /* Block Special */
-#  define S_ISBLK(x) (x & _S_IFBLK)
-# endif
-
-# ifndef S_ISCHR
-#  define	_S_IFCHR 0020000	/* character special */
-#  define S_ISCHR(x) (x & _S_IFCHR)
-# endif
-#endif /*MSVC*/
-
 #endif /* __CDIO_PORTABLE_H__ */

@@ -49,7 +49,7 @@
 #include "cdio_assert.h"
 #include "cdio_private.h"
 #include "_cdio_stdio.h"
-#include "portable.h"
+#include "filemode.h"
 
 #ifndef PATH_MAX
 #define PATH_MAX 4096

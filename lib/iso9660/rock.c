@@ -53,6 +53,7 @@
 #include <cdio/iso9660.h>
 #include <cdio/logging.h>
 #include <cdio/bytesex.h>
+#include "filemode.h"
 
 #define CDIO_MKDEV(ma,mi)	((ma)<<16 | (mi))
 
