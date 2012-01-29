@@ -59,8 +59,8 @@
 #if defined(HAVE_LSEEK64) && defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64)
 #if defined(_MSC_VER)
 #include <io.h>
-#define CDIO_LSEEK lseek64
 #endif
+#define CDIO_LSEEK lseek64
 #else
 #define CDIO_LSEEK lseek
 #endif
