@@ -42,7 +42,7 @@
 # include <ddk/scsi.h>
 #endif
 
-#ifdef WIN32
+#if defined (_WIN32)
 #include <windows.h>
 #endif
 

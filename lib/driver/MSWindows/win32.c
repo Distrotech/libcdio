@@ -69,7 +69,7 @@ static const char _rcsid[] = "$Id: win32.c,v 1.37 2008/04/21 18:30:21 karl Exp $
 #include <sys/types.h>
 #endif
 
-#if defined (MSVC) || defined (_XBOX)
+#if defined (_MSC_VER) || defined (_XBOX)
 #undef IN
 #else
 #include "aspi32.h"

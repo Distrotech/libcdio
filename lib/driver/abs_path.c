@@ -57,7 +57,8 @@
 
 #define skipprefix(path) (path)
 
-#ifndef CharNext		/* defined as CharNext[AW] on Windows. */
+#if !defined(CharNext) || defined(_MSC_VER) /* defined as CharNext[AW] on Windows. */
+# undef CharNext
 # define CharNext(p) ((p) + 1)
 #endif
 
