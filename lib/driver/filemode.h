@@ -103,11 +103,19 @@
 #if !defined S_ISFIFO && defined S_IFIFO
 # define S_ISFIFO(m) (((m) & S_IFMT) == S_IFIFO)
 #endif
-#if !defined S_ISLNK && defined S_IFLNK
-# define S_ISLNK(m) (((m) & S_IFMT) == S_IFLNK)
+#if !defined HAVE_S_ISLNK
+# if !defined S_ISLNK && defined S_IFLNK
+#  define S_ISLNK(m) (((m) & S_IFMT) == S_IFLNK)
+# else
+#  define S_ISLNK(m) ((void)m, 0)
+# endif
 #endif
-#if !defined S_ISSOCK && defined S_IFSOCK
-# define S_ISSOCK(m) (((m) & S_IFMT) == S_IFSOCK)
+#if !defined HAVE_S_ISSOCK
+# if !defined S_ISSOCK && defined S_IFSOCK
+#  define S_ISSOCK(m) (((m) & S_IFMT) == S_IFSOCK)
+# else
+#  define S_ISSOCK(m) ((void)m, 0)
+# endif
 #endif
 #if !defined S_ISMPB && defined S_IFMPB /* V7 */
 # define S_ISMPB(m) (((m) & S_IFMT) == S_IFMPB)
