@@ -301,7 +301,7 @@ iso9660_get_ltime (const iso9660_ltime_t *p_ldate,
 */
 void
 iso9660_set_dtime_with_timezone (const struct tm *p_tm, 
-                                 int timezone,
+                                 int time_zone,
                                  /*out*/ iso9660_dtime_t *p_idr_date)
 {
   memset (p_idr_date, 0, 7);
@@ -317,7 +317,7 @@ iso9660_set_dtime_with_timezone (const struct tm *p_tm,
 
   /* The ISO 9660 timezone is in the range -48..+52 and each unit
      represents a 15-minute interval. */
-  p_idr_date->dt_gmtoff = timezone / 15;
+  p_idr_date->dt_gmtoff = time_zone / 15;
 
   if (p_idr_date->dt_gmtoff < -48 ) {
     
@@ -337,14 +337,14 @@ iso9660_set_dtime_with_timezone (const struct tm *p_tm,
 void
 iso9660_set_dtime (const struct tm *p_tm, /*out*/ iso9660_dtime_t *p_idr_date)
 {
-  int timezone;
+  int time_zone;
 #ifdef HAVE_TM_GMTOFF
   /* Convert seconds to minutes */
-  timezone = p_tm->tm_gmtoff / 60;
+  time_zone = p_tm->tm_gmtoff / 60;
 #else 
-  timezone = (p_tm->tm_isdst > 0) ? -60 : 0;
+  time_zone = (p_tm->tm_isdst > 0) ? -60 : 0;
 #endif
-  iso9660_set_dtime_with_timezone (p_tm, timezone, p_idr_date);
+  iso9660_set_dtime_with_timezone (p_tm, time_zone, p_idr_date);
 }
 
 /*!
@@ -354,7 +354,7 @@ iso9660_set_dtime (const struct tm *p_tm, /*out*/ iso9660_dtime_t *p_idr_date)
 */
 void
 iso9660_set_ltime_with_timezone (const struct tm *p_tm, 
-                                 int timezone,
+                                 int time_zone,
                                  /*out*/ iso9660_ltime_t *pvd_date)
 {
   char *_pvd_date = (char *) pvd_date; 
@@ -371,7 +371,7 @@ iso9660_set_ltime_with_timezone (const struct tm *p_tm,
            0 /* 1/100 secs */ );
 
   /* Set time zone in 15-minute interval encoding. */
-  pvd_date->lt_gmtoff -= (timezone / 15);
+  pvd_date->lt_gmtoff -= (time_zone / 15);
   if (pvd_date->lt_gmtoff < -48 ) {
     
     cdio_warn ("Converted ISO 9660 timezone %d is less than -48. Adjusted", 
@@ -390,14 +390,14 @@ iso9660_set_ltime_with_timezone (const struct tm *p_tm,
 void
 iso9660_set_ltime (const struct tm *p_tm, /*out*/ iso9660_ltime_t *pvd_date)
 {
-  int timezone;
+  int time_zone;
 #ifdef HAVE_TM_GMTOFF
   /* Set time zone in 15-minute interval encoding. */
-  timezone = p_tm->tm_gmtoff / 60;
+  time_zone = p_tm->tm_gmtoff / 60;
 #else
-  timezone = (p_tm->tm_isdst > 0) ? -60 : 0;
+  time_zone = (p_tm->tm_isdst > 0) ? -60 : 0;
 #endif
-  iso9660_set_ltime_with_timezone (p_tm, timezone, pvd_date);
+  iso9660_set_ltime_with_timezone (p_tm, time_zone, pvd_date);
 }
 
 /*!
