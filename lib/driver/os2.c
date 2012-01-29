@@ -30,6 +30,7 @@ static const char _rcsid[] = "$Id: os2.c,v 1.30 2008/04/21 18:30:21 karl Exp $";
 #include <cdio/sector.h>
 #include <cdio/util.h>
 #include <cdio/mmc.h>
+#include <cdio/logging.h>
 #include "cdio_assert.h"
 #include "cdio_private.h"
 
