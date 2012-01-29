@@ -34,11 +34,20 @@
 # include <sys/stat.h>
 #endif
 
-#ifndef HAVE_S_ISLNK
-# define S_ISLNK(s) ((void)s,0)
+#if !defined(HAVE_S_ISLNK)
+#if defined(__MINGW32) || defined(_MSC_VER)
+#define S_ISLNK(st_mode) ((((st_mode)) & 0170000) == (0010000))
+#else
+#define S_ISLNK(s) ((void)s, 0)
 #endif
-#ifndef HAVE_S_ISSOCK
-# define S_ISSOCK(s) ((void)s,0)
+#endif
+
+#if !defined(HAVE_S_ISSOCK)
+#if defined(__MINGW32) || defined(_MSC_VER)
+#define S_ISSOCK(st_mode) ((((st_mode)) & 0170000) == (0140000))
+#else
+#define S_ISSOCK(s) ((void)s,0)
+#endif
 #endif
 
 #include <cdio/iso9660.h>
