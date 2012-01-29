@@ -40,18 +40,23 @@ typedef u_int8_t uint8_t;
 typedef u_int16_t uint16_t;
 typedef u_int32_t uint32_t;
 typedef u_int64_t uint64_t;
-#elif defined(_MSC_VER)
-typedef unsigned __int8   uint8_t;
-typedef unsigned __int16  uint16_t;
-typedef unsigned __int32  uint32_t;
-typedef unsigned __int64  uint64_t;
 #else
 /* If <stdint.h> is not available on your platform please
-   contact the libcdio mailing list so that we can fix it! */
+   contact the libcdio mailing list so that we can fix it!
+   For MSVC, you can find both a public domain stdint.h and
+   inttypes.h in the MSVC/missing directory of libcdio. */
 #include <stdint.h>
 #endif
-  
+
 typedef uint8_t ubyte;
+
+/* MSVC does not define mode_t and ssize_t by default. The way
+   to compensate for missing UNIX types is to include a custom
+   unistd.h that defines them. Such a file is provided with
+   the libcdio source, in the MSVC/missing directory */
+#if defined(_MSC_VER)
+#include <unistd.h>
+#endif
 
   /* default HP/UX macros are broken */
 #if defined(__hpux__)
