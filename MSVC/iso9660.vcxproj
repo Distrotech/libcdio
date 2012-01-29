@@ -36,7 +36,6 @@
     <ClCompile Include="..\lib\iso9660\iso9660.c" />
     <ClCompile Include="..\lib\iso9660\iso9660_fs.c" />
     <ClCompile Include="..\lib\iso9660\rock.c" />
-    <ClCompile Include="..\lib\driver\utf8.c" />
     <ClCompile Include="..\lib\iso9660\xa.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
