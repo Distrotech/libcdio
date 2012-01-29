@@ -1126,7 +1126,7 @@ iso9660_get_application_id(iso9660_pvd_t *p_pvd)
   return strdup(strip_trail(p_pvd->application_id, ISO_MAX_APPLICATION_ID));
 }
 
-#if FIXME
+#ifdef FIXME
 lsn_t
 iso9660_get_dir_extent(const iso9660_dir_t *idr) 
 {
@@ -1142,7 +1142,7 @@ iso9660_get_dir_len(const iso9660_dir_t *idr)
   return idr->length;
 }
 
-#if FIXME
+#ifdef FIXME
 uint8_t
 iso9660_get_dir_size(const iso9660_dir_t *idr) 
 {
