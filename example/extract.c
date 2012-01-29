@@ -36,7 +36,9 @@
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
 #endif
-#include <malloc.h>
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
 
 #if defined(_WIN32)
 #include <direct.h>
@@ -48,6 +50,11 @@
 #include <sys/types.h>
 #endif
 #define _mkdir(a) mkdir(a, S_IRWXU)
+#endif
+
+#if !defined(HAVE_SNPRINTF)
+/* Fallback to unsafe 'sprintf' */
+#define snprintf(str, size, format, ...) sprintf(str, format, __VA_ARGS__)
 #endif
 
 #include <cdio/cdio.h>
