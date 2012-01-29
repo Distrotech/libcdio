@@ -107,12 +107,10 @@ adjust_fuzzy_pvd( iso9660_t *p_iso )
      frame and a header. 
    */
   if (CDIO_CD_FRAMESIZE_RAW == p_iso->i_framesize) {
-    const int pre_user_data=CDIO_CD_SYNC_SIZE +  CDIO_CD_HEADER_SIZE 
-      + CDIO_CD_SUBHEADER_SIZE;
-    char buf[pre_user_data];
-    
-    i_byte_offset -= pre_user_data;
-    
+    char buf[CDIO_CD_SYNC_SIZE + CDIO_CD_HEADER_SIZE + CDIO_CD_SUBHEADER_SIZE];
+
+    i_byte_offset -= CDIO_CD_SYNC_SIZE + CDIO_CD_HEADER_SIZE + CDIO_CD_SUBHEADER_SIZE;
+
     if ( DRIVER_OP_SUCCESS != cdio_stream_seek (p_iso->stream, i_byte_offset, 
 						SEEK_SET) )
       return;
@@ -739,7 +737,7 @@ _iso9660_dir_to_statbuf (iso9660_dir_t *p_iso9660_dir, bool_3way_t b_xa,
 
   if (!dir_len) return NULL;
 
-  i_fname  = from_711(p_iso9660_dir->filename_len);
+  i_fname  = from_711(p_iso9660_dir->filename.len);
 
   /* .. string in statbuf is one longer than in p_iso9660_dir's listing '\1' */
   stat_len      = sizeof(iso9660_stat_t)+i_fname+2;
@@ -784,15 +782,15 @@ _iso9660_dir_to_statbuf (iso9660_dir_t *p_iso9660_dir, bool_3way_t b_xa,
       }
       strncpy(p_stat->filename, rr_fname, i_rr_fname+1);
     } else {
-      if ('\0' == p_iso9660_dir->filename[0] && 1 == i_fname)
+      if ('\0' == p_iso9660_dir->filename.str[1] && 1 == i_fname)
 	strncpy (p_stat->filename, ".", sizeof("."));
-      else if ('\1' == p_iso9660_dir->filename[0] && 1 == i_fname)
+      else if ('\1' == p_iso9660_dir->filename.str[1] && 1 == i_fname)
 	strncpy (p_stat->filename, "..", sizeof(".."));
 #ifdef HAVE_JOLIET
       else if (i_joliet_level) {
 	int i_inlen = i_fname;
 	cdio_utf8_t *p_psz_out = NULL;
-	if (cdio_charset_to_utf8(p_iso9660_dir->filename, i_inlen,
+	if (cdio_charset_to_utf8(&p_iso9660_dir->filename.str[1], i_inlen,
                              &p_psz_out, "UCS-2BE")) {
           strncpy(p_stat->filename, p_psz_out, i_fname);
           free(p_psz_out);
@@ -804,7 +802,7 @@ _iso9660_dir_to_statbuf (iso9660_dir_t *p_iso9660_dir, bool_3way_t b_xa,
       }
 #endif /*HAVE_JOLIET*/
       else {
-	strncpy (p_stat->filename, p_iso9660_dir->filename, i_fname);
+	strncpy (p_stat->filename, &p_iso9660_dir->filename.str[1], i_fname);
       }
     }
   }
@@ -878,12 +876,12 @@ iso9660_dir_to_name (const iso9660_dir_t *iso9660_dir)
 
   /* (iso9660_dir->file_flags & ISO_DIRECTORY) */
   
-  if (iso9660_dir->filename[0] == '\0')
+  if (iso9660_dir->filename.str[1] == '\0')
     return strdup(".");
-  else if (iso9660_dir->filename[0] == '\1')
+  else if (iso9660_dir->filename.str[1] == '\1')
     return strdup("..");
   else {
-    return strdup(iso9660_dir->filename);
+    return strdup(&iso9660_dir->filename.str[1]);
   }
 }
 

@@ -273,8 +273,18 @@ struct iso9660_dir_s {
                                           the Extent described by this
                                           Directory Record is
                                           recorded. (9.1.9) */
-  iso711_t         filename_len;      /*! number of bytes in filename field */
-  char             filename[EMPTY_ARRAY_SIZE];
+/*! MSVC compilers cannot handle a zero sized array in the middle
+    of a struct, and iso9660_dir_s is reused within iso9660_pvd_s.
+    Therefore, instead of defining:
+       iso711_t filename_len;
+       char     filename[];
+    we leverage the fact that iso711_t and char are the same size
+    and use an union. The only gotcha is that the actual string
+    payload of filename.str[] starts at 1, not 0. */
+  union { 
+    iso711_t        len;
+    char            str[1];
+  } filename;
 } GNUC_PACKED;
 
 /*! 
