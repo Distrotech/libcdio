@@ -30,20 +30,20 @@
 #endif
 
 #if !defined(HAVE_FTRUNCATE)
-# if defined ( WIN32 )
+# if defined (_WIN32)
 #  define ftruncate chsize
 # endif
 #endif /*HAVE_FTRUNCATE*/
 
 #if !defined(HAVE_SNPRINTF)
-# if defined ( MSVC )
+# if defined (_MSC_VER)
 #  define snprintf _snprintf
 # endif
 #endif /*HAVE_SNPRINTF*/
 
 #if !defined(HAVE_VSNPRINTF)
-# if defined ( MSVC )
-#  define snprintf _vsnprintf
+# if defined (_MSC_VER)
+#  define vsnprintf _vsnprintf
 # endif
 #endif /*HAVE_SNPRINTF*/
 
@@ -64,13 +64,5 @@
 #  define S_ISCHR(x) (x & _S_IFCHR)
 # endif
 #endif /*MSVC*/
-
-#ifdef HAVE_MEMSET
-# define BZERO(ptr, size) memset(ptr, 0, size)
-#elif  HAVE_BZERO
-# define BZERO(ptr, size) bzero(ptr, size)
-#else 
-#error  You need either memset or bzero
-#endif
 
 #endif /* __CDIO_PORTABLE_H__ */
