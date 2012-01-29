@@ -681,7 +681,7 @@ udf_readdir(udf_dirent_t *p_udf_dirent)
 	  p_udf_dirent->psz_name = (char *)
 	    realloc(p_udf_dirent->psz_name, sizeof(char)*i_len+1);
 	
-	unicode16_decode(p_udf_dirent->fid->imp_use 
+	unicode16_decode(p_udf_dirent->fid->u.imp_use 
 			 + p_udf_dirent->fid->i_imp_use, 
 			 i_len, p_udf_dirent->psz_name);
       }
