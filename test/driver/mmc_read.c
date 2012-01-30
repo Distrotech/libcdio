@@ -41,7 +41,7 @@
 #endif
 #if !defined(HAVE_SLEEP) && defined(_WIN32)
 #include <windows.h>
-#define sleep Sleep
+#define sleep(s) Sleep(1000*s)
 #endif
 
 #include <cdio/cdio.h>
