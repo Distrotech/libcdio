@@ -22,6 +22,12 @@ if BUILD_CD_PARANOIA
 paranoiaheaders = cdda.h cdtext.h 
 endif
 
+cdio_config.h: $(top_builddir)/config.h
+	@echo  '#ifndef __CDIO_CONFIG_H__' > cdio_config.h
+	@echo  '#define __CDIO_CONFIG_H__' >> cdio_config.h
+	@cat  $(top_builddir)/config.h >>cdio_config.h
+	@echo '#endif /* #ifndef CDIO_CONFIG_H */' >>cdio_config.h
+
 libcdioincludedir=$(includedir)/cdio
 dist_libcdioinclude_HEADERS = \
 	audio.h \
@@ -57,5 +63,9 @@ dist_libcdioinclude_HEADERS = \
 	xa.h \
 	$(paranoiaheaders)
 
+nodist_libcdioinclude_HEADERS = cdio_config.h
+
 EXTRA_DIST = version.h.in
 BUILT_SOURCES = version.h
+
+DISTCLEANFILES = cdio_config.h
