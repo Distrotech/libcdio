@@ -189,20 +189,6 @@ AC_CHECK_HEADERS(errno.h fcntl.h glob.h limits.h pwd.h)
 AC_CHECK_HEADERS(stdarg.h stdbool.h stdio.h sys/cdio.h sys/param.h \
 		 sys/time.h sys/timeb.h sys/utsname.h)
 
-# We have to disable cdda_player unless we have either ncurses.h or
-# curses.h
-have_ncurses_h='no'
-if test "x$enable_cdda_player" = "xyes"; then 
-  enable_cdda_player='no'
-  AC_CHECK_HEADERS(ncurses.h, 
-  		   [enable_cdda_player='yes'; have_ncurses_h='yes'],
-    		   [AC_CHECK_HEADERS(curses.h, 
-		                    [enable_cdda_player='yes'],
-				    [AC_CHECK_HEADERS(ncurses/ncurses.h,
-				                      enable_cdda_player='yes')
-						      ])])
-fi
-
 # FreeBSD 4 has getopt in unistd.h. So we include that before
 # getopt.h 
 AC_CHECK_HEADERS(unistd.h getopt.h)
@@ -442,6 +428,10 @@ int has_timeout=sizeof(test.timeout);],
 	  LIBISO9660_CFLAGS+=' -D_FILE_OFFSET_BITS=64 -D_OFF_T_DEFINED -D_OFF_T_ -D_off_t=off64_t -Doff_t=off64_t'
 	fi
 	joliet_supported="yes"
+	if test "x$enable_cdda_player" = "xyes"; then
+	  AC_MSG_RESULT([disabling cdda_player (not supported on this platform)])
+	fi
+	enable_cdda_player="no"
 	;;
      freebsd4.*|freebsd5.*|freebsd[6-9]*|dragonfly*|kfreebsd*)
      	AC_DEFINE([HAVE_FREEBSD_CDROM], [1], 
@@ -592,6 +582,20 @@ fi
 
 AC_SUBST(CDDB_LIBS)
 
+# We have to disable cdda_player unless we have either ncurses.h or
+# curses.h
+have_ncurses_h='no'
+if test "x$enable_cdda_player" = "xyes"; then 
+    enable_cdda_player='no'
+    AC_CHECK_HEADERS(ncurses.h, 
+		   [enable_cdda_player='yes'; have_ncurses_h='yes'],
+		   [AC_CHECK_HEADERS(curses.h, 
+		                    [enable_cdda_player='yes'],
+				    [AC_CHECK_HEADERS(ncurses/ncurses.h,
+				                      enable_cdda_player='yes')
+						      ])])
+fi
+
 AC_DEFINE(HAVE_KEYPAD, [], [Define this if your libcurses has keypad])
 if test "x$enable_cdda_player" = "xyes"; then
     if test "x$have_ncurses_h" = "xyes"; then
@@ -699,7 +703,7 @@ AC_CONFIG_FILES([test/check_nrg.sh], [chmod +x test/check_nrg.sh])
 AC_CONFIG_FILES([test/check_paranoia.sh], [chmod +x test/check_paranoia.sh])
 AC_OUTPUT
 
-AC_MSG_NOTICE([
+AC_MSG_RESULT([
 Using CD-ROM drivers : $cd_drivers
 Building cd-paranoia : $(test "x$enable_cd_paranoia" = "xyes" && echo yes || echo no)
 Building cd-info     : $(test "x$enable_cd_info" = "xyes" && echo yes || echo no)
