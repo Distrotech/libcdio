@@ -137,13 +137,13 @@ libcdio_cdda_la_LDFLAGS = $(libcdio_cdda_la_ldflags) -Wl,--version-script=libcdi
 libcdio_cdda_la_DEPENDENCIES = libcdio_cdda.la.ver
 
 libcdio_cdda.la.ver: $(libcdio_cdda_la_OBJECTS) $(srcdir)/libcdio_cdda.sym
-	echo 'CDIO_CDDA_$(libcdio_cdda_la_MAJOR) { ' > $@
-	objs=`for obj in $(libcdio_cdda_la_OBJECTS); do sed -ne "s/^pic_object='\(.*\)'$$/\1/p" $$obj; done`; \
+	@echo 'CDIO_CDDA_$(libcdio_cdda_la_MAJOR) { ' > $@
+	@objs=`for obj in $(libcdio_cdda_la_OBJECTS); do sed -ne "s/^pic_object='\(.*\)'$$/\1/p" $$obj; done`; \
 	if test -n "$$objs" ; then \
 	  nm $${objs} | sed -n -e 's/^.*[ 	][ABCDGIRSTW][ABCDGIRSTW]*[ 	][ 	]*\([_A-Za-z][_A-Za-z0-9]*\)$$/\1/p' | sort -u | { first=true; while read symbol; do if grep -q "^$${symbol}\$$" $(srcdir)/libcdio_cdda.sym; then if test $$first = true; then echo "  global:"; first=false; fi; echo "    $${symbol};"; fi; done; } >> $@; \
 	  nm $${objs} | sed -n -e 's/^.*[ 	][ABCDGIRSTW][ABCDGIRSTW]*[ 	][ 	]*\([_A-Za-z][_A-Za-z0-9]*\)$$/\1/p' | sort -u | { first=true; while read symbol; do if grep -q "^$${symbol}\$$" $(srcdir)/libcdio_cdda.sym; then :; else if test $$first = true; then echo "  local:"; first=false; fi; echo "    $${symbol};"; fi; done; } >> $@; \
 	fi
-	echo '};' >> $@
+	@echo '};' >> $@
 else 
 libcdio_cdda_la_LDFLAGS = $(libcdio_cdda_la_ldflags)
 endif 
