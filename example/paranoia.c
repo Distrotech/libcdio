@@ -81,6 +81,7 @@ write_WAV_header(int fd, int32_t i_bytecount){
   put_num(16, fd, 2);                   /* 34-35 */
   bytes_ret = writestr(fd, "data");     /* 36-39 */
   put_num(i_bytecount, fd, 4);          /* 40-43 */
+  (void)bytes_ret; /* Silence unused warnings */
 }
 
 int
@@ -166,6 +167,7 @@ main(int argc, const char *argv[])
 	  break;
 	}
 	bytes_ret = write(fd, p_readbuf, CDIO_CD_FRAMESIZE_RAW);
+	(void)bytes_ret; /* Silence unused warnings */
       }
       close(fd);
     }

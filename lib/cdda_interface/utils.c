@@ -51,6 +51,7 @@ cdmessage(cdrom_drive_t *d, const char *s)
     switch(d->messagedest){
     case CDDA_MESSAGE_PRINTIT:
       bytes_ret = write(STDERR_FILENO, s, strlen(s));
+      (void)bytes_ret; /* Silence unused warnings */
       break;
     case CDDA_MESSAGE_LOGIT:
       d->messagebuf=catstring(d->messagebuf,s);
@@ -88,6 +89,7 @@ idperror(int messagedest,char **messages,const char *f,
 	bytes_ret = write(STDERR_FILENO,": ",2);
 	bytes_ret = write(STDERR_FILENO,strerror(errno),strlen(strerror(errno)));
 	bytes_ret = write(STDERR_FILENO,"\n",1);
+	(void)bytes_ret; /* Silence unused warnings */
       }
       break;
     case CDDA_MESSAGE_LOGIT:
@@ -133,6 +135,7 @@ idmessage(int messagedest,char **messages,const char *f,
       bytes_ret = write(STDERR_FILENO,buffer,strlen(buffer));
       if(!malloced)
 	  bytes_ret = write(STDERR_FILENO,"\n",1);
+      (void)bytes_ret; /* Silence unused warnings */
       break;
     case CDDA_MESSAGE_LOGIT:
       if(messages){
