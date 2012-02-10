@@ -231,22 +231,15 @@ cdio_stdio_new(const char pathname[])
   if (pathname == NULL)
     return NULL;
 
-  pathdup = strdup(pathname);
+  /* MinGW may require a translated path */
+  pathdup = _cdio_strdup_fixpath(pathname);
   if (pathdup == NULL)
     return NULL;
 
-#ifdef __MINGW32__
-  /* _stati64 requires using native Windows paths => convert "/c/..." to "c:/..." */
-  if ((strlen(pathdup) > 3) && (pathdup[0] == '/') && (pathdup[2] == '/') && (isalpha(pathdup[1])))
-    {
-      pathdup[0] = pathdup[1];
-      pathdup[1] = ':';
-    }
-#endif
-  if (CDIO_STAT (pathname, &statbuf) == -1) 
+  if (CDIO_STAT (pathdup, &statbuf) == -1) 
     {
       cdio_warn ("could not retrieve file info for `%s': %s", 
-                 pathname, strerror (errno));
+                 pathdup, strerror (errno));
       free(pathdup);
       return NULL;
     }
