@@ -1,4 +1,5 @@
-#   Copyright (C) 2003, 2004, 2006, 2008, 2009, 2010 Rocky Bernstein <rocky@gnu.org>
+#   Copyright (C) 2003, 2004, 2006, 2008, 2009, 2010
+#   2012 Rocky Bernstein <rocky@gnu.org>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -30,7 +31,7 @@ endif
 
 hack = check_sizeof testassert testgetdevices testischar \
        testisocd testisocd2 testiso9660 test_lib_driver_util \
-       $(testparanoia) testpregap testunconfig
+       $(testparanoia) testpregap
 
 EXTRA_PROGRAMS = testdefault 
 DATA_DIR       = @abs_top_srcdir@/test/data
@@ -48,19 +49,19 @@ testiso9660_LDADD     = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
 testisocd_LDADD       = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
 testisocd2_LDADD      = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
 
-testunconfig_LDADD    = $(LIBCDIO_LIBS) $(LTLIBICONV)
-
 test_lib_driver_util_LDADD    = $(LIBCDIO_LIBS) $(LTLIBICONV)
 test_lib_driver_util_CFLAGS   = -DDATA_DIR=\"$(DATA_DIR)\"
 
 testpregap_LDADD    = $(LIBCDIO_LIBS) $(LTLIBICONV)
 testpregap_CFLAGS   = -DDATA_DIR=\"$(DATA_DIR)\"
 
-check_SCRIPTS = check_nrg.sh  check_cue.sh  check_cd_read.sh \
+check_SCRIPTS = check_nrg.sh  check_cue.sh  check_cd_read.sh check_udf.sh \
                 check_iso.sh  check_fuzzyiso.sh check_paranoia.sh check_opts.sh
 # If we beefed this up so it checked to see if a CD-DA was loaded
 # it could be an automatic test. But for now, not so.
 #               check_paranoia.sh
+
+check_udf.sh: @abs_top_builddir@/example/extract
 
 check_PROGRAMS = $(hack)
 
@@ -99,12 +100,12 @@ test: check-am
 # learning any more of this awful system than I need to.
 check-am:	make-executable
 make-executable: check_nrg.sh check_cue.sh check_paranoia.sh
-	chmod +x *.sh
-	if test ! -f cdda.bin ; then \
+	@chmod +x *.sh
+	@if test ! -f cdda.bin ; then \
 		test -L cdda.bin && $(RM) cdda.bin ; \
 		$(LN_S) $(abs_top_srcdir)/test/data/cdda.bin cdda.bin ; \
 	fi
-	if test ! -f isofs-m1.bin ; then \
+	@if test ! -f isofs-m1.bin ; then \
 		test -L cdda.bin && $(RM) isofs-m1.bin ; \
 		$(LN_S) $(abs_top_srcdir)/test/data/isofs-m1.bin isofs-m1.bin ;  \
 	fi
