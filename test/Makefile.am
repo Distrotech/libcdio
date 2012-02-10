@@ -61,7 +61,7 @@ check_SCRIPTS = check_nrg.sh  check_cue.sh  check_cd_read.sh check_udf.sh \
 # it could be an automatic test. But for now, not so.
 #               check_paranoia.sh
 
-check_udf.sh: @abs_top_builddir@/example/extract$(EXEEXT)
+check_udf.sh: @abs_top_builddir@/example/extract
 
 check_PROGRAMS = $(hack)
 
@@ -100,12 +100,12 @@ test: check-am
 # learning any more of this awful system than I need to.
 check-am:	make-executable
 make-executable: check_nrg.sh check_cue.sh check_paranoia.sh
-	chmod +x *.sh
-	if test ! -f cdda.bin ; then \
+	@chmod +x *.sh
+	@if test ! -f cdda.bin ; then \
 		test -L cdda.bin && $(RM) cdda.bin ; \
 		$(LN_S) $(abs_top_srcdir)/test/data/cdda.bin cdda.bin ; \
 	fi
-	if test ! -f isofs-m1.bin ; then \
+	@if test ! -f isofs-m1.bin ; then \
 		test -L cdda.bin && $(RM) isofs-m1.bin ; \
 		$(LN_S) $(abs_top_srcdir)/test/data/isofs-m1.bin isofs-m1.bin ;  \
 	fi

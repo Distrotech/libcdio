@@ -1,7 +1,7 @@
 /*
   Copyright (C) 2012 Pete Batard <pete@akeo.ie>
   Based on samples copyright (c) 2003-2011 Rocky Bernstein <rocky@gnu.org>
-  
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
@@ -74,6 +74,17 @@
   psz_str = NULL;
 
 const char *psz_extract_dir;
+
+static void log_handler (cdio_log_level_t level, const char *message)
+{
+  switch(level) {
+  case CDIO_LOG_DEBUG:
+  case CDIO_LOG_INFO:
+    return;
+  default:
+    printf("cdio %d message: %s\n", level, message);
+  }
+}
 
 static int udf_extract_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent, const char *psz_path)
 {
@@ -219,20 +230,20 @@ out:
 int main(int argc, char** argv)
 {
   iso9660_t* p_iso = NULL;
-  udf_t* p_udf = NULL; 
+  udf_t* p_udf = NULL;
   udf_dirent_t* p_udf_root;
   char *psz_str = NULL;
   char vol_id[UDF_VOLID_SIZE] = "";
   char volset_id[UDF_VOLSET_ID_SIZE+1] = "";
   int r = 0;
 
-  cdio_loglevel_default = CDIO_LOG_DEBUG;
-  
+  cdio_log_set_handler (log_handler);
+
   if (argc < 3) {
     fprintf(stderr, "Usage: extract <iso_image> <extraction_dir>\n");
     return 1;
   }
-  
+
   /* Warn if LFS doesn't appear to be enabled */
   if (sizeof(off_t) < 8) {
     fprintf(stderr, "INFO: Large File Support not detected (required for files >2GB)\n");
@@ -257,7 +268,7 @@ int main(int argc, char** argv)
     goto out;
   }
   vol_id[0] = 0; volset_id[0] = 0;
-  
+
   /* Show basic UDF Volume info */
   if (udf_get_volume_id(p_udf, vol_id, sizeof(vol_id)) > 0)
     fprintf(stderr, "Volume id: %s\n", vol_id);

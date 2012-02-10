@@ -40,9 +40,6 @@
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
 #endif 
-#ifdef HAVE_WINDOWS_H
-#include <windows.h>
-#endif
 #if !defined(HAVE_SLEEP) && defined(_WIN32)
 #include <windows.h>
 #define sleep(s) Sleep(1000*s)
