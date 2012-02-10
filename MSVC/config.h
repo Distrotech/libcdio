@@ -4,6 +4,13 @@
 #pragma warning(disable:4996)
 /* Disable: warning C4018: signed/unsigned mismatch */
 #pragma warning(disable:4018)
+/* Disable: warning C4242: conversion from 'x' to 'y', possible loss of data */
+#pragma warning(disable:4242) /* 32 bit */
+#pragma warning(disable:4244) /* 64 bit */
+#pragma warning(disable:4267) /* 64 bit */
+#pragma warning(disable:4244) /* double to float */
+/* Disable: warning C4305: truncation from 'double' to 'float' */
+#pragma warning(disable:4305)
 
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
@@ -244,7 +251,7 @@
 /* #undef HAVE_SYS_TIMEB_H */
 
 /* Define to 1 if you have the <sys/time.h> header file. */
-#define HAVE_SYS_TIME_H 1
+/* #undef HAVE_SYS_TIME_H */
 
 /* Define to 1 if you have the <sys/types.h> header file. */
 #define HAVE_SYS_TYPES_H 1

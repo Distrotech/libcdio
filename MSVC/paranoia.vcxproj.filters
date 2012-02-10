@@ -11,54 +11,48 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\lib\iso9660\iso9660_private.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include=".\config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\cdio\iso9660.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lib\driver\cdio_assert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\cdio\bytesex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\cdio\util.h">
+    <ClInclude Include="..\lib\driver\cdio_assert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\cdio\cdio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\driver\_cdio_stdio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lib\driver\cdio_private.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\cdio\utf8.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\cdio\logging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\driver\filemode.h">
+    <ClInclude Include="..\lib\paranoia\gap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\paranoia\isort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\paranoia\overlap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\paranoia\p_block.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\lib\iso9660\iso9660_fs.c">
+    <ClCompile Include="..\lib\paranoia\gap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\iso9660\rock.c">
+    <ClCompile Include="..\lib\paranoia\isort.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\iso9660\xa.c">
+    <ClCompile Include="..\lib\paranoia\overlap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\iso9660\iso9660.c">
+    <ClCompile Include="..\lib\paranoia\p_block.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lib\paranoia\paranoia.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
