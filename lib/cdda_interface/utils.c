@@ -21,6 +21,11 @@
 # define __CDIO_CONFIG_H__ 1
 #endif
 
+#ifdef _MSC_VER
+#include <io.h>
+#define STDERR_FILENO 2
+#endif
+
 #include "common_interface.h"
 #include "utils.h"
 void 

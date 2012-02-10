@@ -1355,14 +1355,16 @@ static long int
 i_stage2_each(root_block *root, v_fragment_t *v,
 	      void(*callback)(long int, paranoia_cb_mode_t))
 {
+  cdrom_paranoia_t *p;
+  long dynoverlap;
 
   /* If this fragment has already been merged & freed, abort. */
   if (!v || !v->one) return(0);
 
-  cdrom_paranoia_t *p=v->p;
+  p=v->p;
 
   /* ??? Why do we round down to an even dynoverlap? */
-  long dynoverlap=p->dynoverlap/2*2;
+  dynoverlap=p->dynoverlap/2*2;
   
   /* If there's no verified root yet, abort. */
   if (!rv(root)){

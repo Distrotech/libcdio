@@ -170,9 +170,9 @@ jitter_read (cdrom_drive_t *d, void *p, lsn_t begin, long i_sectors,
 #ifdef HAVE_DRAND48
     i_jitter = i_coeff * (int)((drand48()-.5)*CDIO_CD_FRAMESIZE_RAW/8);
 #else
-    i_jitter = i_coeff * (int)((rand()-.5)*CDIO_CD_FRAMESIZE_RAW/8);
+    i_jitter = i_coeff * (int)(((((double)rand())/RAND_MAX)-.5)*CDIO_CD_FRAMESIZE_RAW/8);
 #endif
-    
+
     /* We may need to add another sector to compensate for the bytes that
        will be dropped off when jittering, and the begin location may
        be a little different.

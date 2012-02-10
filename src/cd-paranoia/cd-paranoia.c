@@ -52,27 +52,35 @@
 #include <fcntl.h>
 #endif
 
-#include "getopt.h"
-
 #ifdef HAVE_ERRNO_H
 #include <errno.h>
 #endif
-
-#include <math.h>
-#include <sys/time.h>
 
 #ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
 #endif
 
-#if !defined(HAVE_GETTIMEOFDAY)
-/* MinGW uses sys/time.h and sys/timeb.h to roll its own gettimeofday() */
-# if defined(HAVE_SYS_TIME_H) && defined(HAVE_SYS_TIMEB_H)
+#if defined(HAVE_SYS_TIME_H)
 # include <sys/time.h>
+#endif
+
+#if defined(HAVE_SYS_TIMEB_H)
 # include <sys/timeb.h>
-static void gettimeofday(struct timeval* tv, void* timezone);
-# endif
-#endif /* !defined(HAVE_GETTIMEOFDAY) */
+#endif
+
+#ifdef _MSC_VER
+#include <io.h>
+#define isatty _isatty
+#define STDERR_FILENO 2
+#endif
+
+#include <math.h>
+#include "getopt.h"
+
+/* Must have for Windows, but unknown on POSIX */
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
 
 #include <cdio/cdio.h>
 #include <cdio/cd_types.h>
@@ -276,7 +284,11 @@ display_toc(cdrom_drive_t *d)
   report("");
 }
 
+#if !defined(_MSC_VER)
 #include "usage.h"
+#else
+#include "usage-copy.h"
+#endif
 static void usage(FILE *f)
 {
   fprintf( f, usage_help);
@@ -329,7 +341,9 @@ callback(long int inpos, paranoia_cb_mode_t function)
   static int last=0;
   static long lasttime=0;
   long int sector, osector=0;
+#if defined(HAVE_GETTIMEOFDAY)
   struct timeval thistime;
+#endif
   static char heartbeat=' ';
   int position=0,aheadposition=0;
   static int overlap=0;
@@ -472,9 +486,13 @@ callback(long int inpos, paranoia_cb_mode_t function)
 	break;
 	
       }
-      
+
+#if defined(HAVE_GETTIMEOFDAY)
       gettimeofday(&thistime,NULL);
       test=thistime.tv_sec*10+thistime.tv_usec/100000;
+#elif defined(_WIN32)
+      test = GetTickCount()/100;
+#endif
 
       if(lasttime!=test || function==-1 || slast!=slevel){
 	if(lasttime!=test || function==-1){
@@ -1187,7 +1205,7 @@ main(int argc,char *argv[])
 	      }
 	    }
 	    
-	    out=open(outfile_name,O_RDWR|O_CREAT|O_TRUNC,0666);
+	    out=open(outfile_name,O_RDWR|O_CREAT|O_TRUNC|O_BINARY,0666);
 	    if(out==-1){
 	      report3("Cannot open specified output file %s: %s",
 		      outfile_name, strerror(errno));
@@ -1221,7 +1239,7 @@ main(int argc,char *argv[])
 	    break;
 	  }
 	  
-	  out = open(outfile_name, O_RDWR|O_CREAT|O_TRUNC, 0666);
+	  out = open(outfile_name, O_RDWR|O_CREAT|O_TRUNC|O_BINARY, 0666);
 	  if(out==-1){
 	    report3("Cannot open default output file %s: %s", outfile_name,
 		    strerror(errno));

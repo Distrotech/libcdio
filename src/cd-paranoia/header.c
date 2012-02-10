@@ -26,6 +26,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef _MSC_VER
+#include <io.h>
+#define write _write
+#endif
 
 static void PutNum(long num,int f,int endianness,int bytes){
   int i;

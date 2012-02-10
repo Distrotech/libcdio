@@ -21,10 +21,18 @@
 /* Eliminate teeny little writes.  patch submitted by 
    Rob Ross <rbross@parl.ces.clemson.edu> --Monty 19991008 */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+# define __CDIO_CONFIG_H__ 1
+#endif
+
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
+#ifdef _MSC_VER
+#include <io.h>
+#endif
 
 #define OUTBUFSZ 32*1024
 
