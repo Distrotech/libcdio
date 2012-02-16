@@ -270,27 +270,25 @@ bool cdio_charset_from_utf8(cdio_utf8_t * src, char ** dst,
                             int * dst_len, const char * dst_charset)
   {
   wchar_t* le_dst;
-  size_t len;
+  size_t i, len;
 
   if (src == NULL || dst == NULL || dst_len == NULL || dst_charset == NULL || strcmp(dst_charset, "UTF-8") != 0)
     return false;
 
+  /* Eliminate empty strings */
   le_dst = utf8_to_wchar(src);
-  if (le_dst == NULL)
+  if ((le_dst == NULL) || (le_dst[0] == 0)) {
+    free(le_dst);
     return false;
-
-  /* zero length is a headache (LCMapString doesn't support it)
-     => eliminate this case first */
-  if (le_dst[0] == 0) {
-    *dst = (char*)le_dst;
-    return true;
   }
 
   /* Perform byte reversal */
   len = wcslen(le_dst);
-  *dst = (char*)calloc(len, sizeof(wchar_t));
-
-  LCMapStringW(0, LCMAP_BYTEREV, (LPCWSTR)le_dst, len, (LPWSTR)*dst, len);
+  *dst = (char*)calloc(len+1, sizeof(wchar_t));
+  for (i=0; i<2*len; i++) {
+    (*dst)[i] = ((char*)le_dst)[i+1];
+    (*dst)[i+1] = ((char*)le_dst)[i];
+  }
   free(le_dst);
 
   return true;
@@ -300,6 +298,7 @@ bool cdio_charset_to_utf8(char *src, size_t src_len, cdio_utf8_t **dst,
                           const char * src_charset)
   {
   wchar_t* le_src;
+  int i;
 
   if (src == NULL || dst == NULL || src_charset == NULL || strcmp(src_charset, "UCS-2BE") != 0)
     return false;
@@ -309,18 +308,19 @@ bool cdio_charset_to_utf8(char *src, size_t src_len, cdio_utf8_t **dst,
     src_len <<=2;
   }
 
-  /* zero length is a headache (LCMapString doesn't support it)
-     => eliminate this case first */
-  if (src_len == 0) {
-    *dst = (cdio_utf8_t*)malloc(1);
-    *dst[0] = 0;
-    return true;
+  /* Eliminate empty strings */
+  if ((src_len < 2) || ((src[0] == 0) && (src[1] == 0))) {
+    *dst = NULL;
+    return false;
   }
 
+  /* Perform byte reversal */
   le_src = (wchar_t*)malloc(src_len+2);
-  /* WideCharToMultiByte only takes UCS-2LE, and we are fed UCS-2BE 
-     => perform byte reversal */
-  LCMapStringW(0, LCMAP_BYTEREV, (LPCWSTR)src, src_len, le_src, src_len);
+  for (i=0; i<src_len; i+=2) {
+    ((char*)le_src)[i] = src[i+1];
+    ((char*)le_src)[i+1] = src[i];
+  }
+  le_src[src_len/2] = 0;
   *dst = wchar_to_utf8(le_src);
   free(le_src);
 
