@@ -73,7 +73,8 @@
   free(psz_str);                     \
   psz_str = NULL;
 
-const char *psz_extract_dir;
+static const char *psz_extract_dir;
+static uint8_t i_joliet_level = 0;
 
 static void log_handler (cdio_log_level_t level, const char *message)
 {
@@ -178,8 +179,10 @@ static int iso_extract_files(iso9660_t* p_iso, const char *psz_path)
   psz_basename = &psz_fullpath[i_length];
 
   p_entlist = iso9660_ifs_readdir(p_iso, psz_path);
-  if (!p_entlist)
+  if (!p_entlist) {
+    printf("Could not access %s\n", psz_path);
     return 1;
+  }
 
   _CDIO_LIST_FOREACH (p_entnode, p_entlist) {
     p_statbuf = (iso9660_stat_t*) _cdio_list_node_data(p_entnode);
@@ -187,7 +190,7 @@ static int iso_extract_files(iso9660_t* p_iso, const char *psz_path)
     if ( (strcmp(p_statbuf->filename, ".") == 0)
       || (strcmp(p_statbuf->filename, "..") == 0) )
       continue;
-    iso9660_name_translate(p_statbuf->filename, psz_basename);
+    iso9660_name_translate_ext(p_statbuf->filename, psz_basename, i_joliet_level);
     if (p_statbuf->type == _STAT_DIR) {
       _mkdir(psz_fullpath);
       if (iso_extract_files(p_iso, psz_iso_name))
@@ -286,12 +289,13 @@ int main(int argc, char** argv)
   goto out;
 
 try_iso:
-  p_iso = iso9660_open(argv[1]);
+  p_iso = iso9660_open_ext(argv[1], ISO_EXTENSION_ALL);
   if (p_iso == NULL) {
     fprintf(stderr, "Unable to open image '%s'.\n", argv[1]);
     r = 1;
     goto out;
   }
+  i_joliet_level = iso9660_ifs_get_joliet_level(p_iso);
 
   /* Show basic ISO9660 info from the Primary Volume Descriptor. */
   print_vd_info("Application", iso9660_ifs_get_application_id);
