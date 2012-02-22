@@ -182,7 +182,16 @@ typedef uint8_t ubyte;
 #ifndef NULL
 # define NULL ((void*) 0)
 #endif
-  
+
+  /* Provide a notice for deprecated elements */
+#if defined(__GNUC__)
+#define LIBCDIO_DEPRECATED(object, notice) object __attribute__ ((deprecated(notice)))
+#elif defined(_MSC_VER)
+#define LIBCDIO_DEPRECATED(object, notice) __declspec(deprecated(notice)) object
+#else
+#define LIBCDIO_DEPRECATED(object, notice)
+#endif
+
   /* our own offsetof()-like macro */
 #define __cd_offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
   
