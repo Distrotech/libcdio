@@ -32,6 +32,7 @@ dist_libcdioinclude_HEADERS = \
 	bytesex_asm.h \
 	cdio.h \
 	cd_types.h \
+	cdtext.h \
 	device.h \
 	disc.h \
 	ds.h \
