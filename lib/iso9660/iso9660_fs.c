@@ -19,16 +19,20 @@
 /* iso9660 filesystem-based routines */
 
 #if defined(HAVE_CONFIG_H) && !defined(__CDIO_CONFIG_H__)
-# include "config.h"
-# define __CDIO_CONFIG_H__ 1
+#include "config.h"
+#define __CDIO_CONFIG_H__ 1
+#endif
+
+#ifdef HAVE_STDIO_H
+#include <stdio.h>
 #endif
 
 #ifdef HAVE_STRING_H
-# include <string.h>
+#include <string.h>
 #endif
 
 #ifdef HAVE_ERRNO_H
-# include <errno.h>
+#include <errno.h>
 #endif
 
 #ifdef HAVE_LANGINFO_CODESET
@@ -45,8 +49,6 @@
 #include "cdio_assert.h"
 #include "_cdio_stdio.h"
 #include "cdio_private.h"
-
-#include <stdio.h>
 
 static const char _rcsid[] = "$Id: iso9660_fs.c,v 1.47 2008/04/18 16:02:09 karl Exp $";
 

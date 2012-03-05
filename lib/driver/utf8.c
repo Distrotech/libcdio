@@ -23,8 +23,12 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_STDIO_H
+#include <stdio.h>
+#endif
+
 #ifdef HAVE_STRING_H
-# include <string.h>
+#include <string.h>
 #endif
 
 #ifdef HAVE_STDLIB_H
@@ -37,10 +41,6 @@
 
 #include <cdio/utf8.h>
 #include <cdio/logging.h>
-
-#ifdef HAVE_STDIO_H
-#include <stdio.h>
-#endif
 
 /* Windows requires some basic UTF-8 support outside of Joliet */
 #if defined(_WIN32)
@@ -55,7 +55,7 @@
  * Converts an UTF-16 string to UTF8 (allocate returned string)
  * Returns NULL on error
  */
-char* cdio_wchar_to_utf8(const wchar_t* wstr)
+static inline char* cdio_wchar_to_utf8(const wchar_t* wstr)
   {
   int size = 0;
   char* str = NULL;
@@ -99,6 +99,18 @@ wchar_t* cdio_utf8_to_wchar(const char* str)
   }
   return wstr;
   }
+
+/* UTF-8 compliant version of fopen() */
+FILE* fopen_utf8(const char* filename, const char* mode)
+{
+  FILE* ret = NULL;
+  wchar_t* wfilename = cdio_utf8_to_wchar(filename);
+  wchar_t* wmode =  cdio_utf8_to_wchar(mode);
+  ret = _wfopen(wfilename, wmode);
+  free(wfilename);
+  free(wmode);
+  return ret;
+}
 #endif
 
 #ifdef HAVE_JOLIET
