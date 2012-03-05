@@ -11,5 +11,5 @@ fi
 
 ./configure --enable-maintainer-mode --disable-cddb \
   --disable-vcd-info --disable-cxx --disable-cpp-progs \
-  --without-cd-drive --without-cd-info --without-cd-paranoia \
+  --without-cd-drive --without-cd-info \
   --without-cdda-player --without-cd-read --enable-rock "$@"

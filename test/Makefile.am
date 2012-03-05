@@ -26,7 +26,7 @@ SUBDIRS = data driver
 
 hack = check_sizeof testassert testgetdevices testischar \
        testisocd testisocd2 testiso9660 test_lib_driver_util \
-       $(testparanoia) testpregap
+       testpregap
 
 EXTRA_PROGRAMS = testdefault 
 DATA_DIR       = @abs_top_srcdir@/test/data
@@ -61,7 +61,6 @@ check_DATA = vcd_demo.right vcd_demo_vcdinfo.right \
 	     videocd.right \
 	     cdda.right \
 	     isofs-m1.right isofs-m1-no-rr.right \
-	     cd-paranoia-log.right \
 	     check_opts0.right check_opts1.right check_opts2.right \
              check_opts3.right check_opts4.right check_opts5.right \
              check_opts6.right check_opts7.right \

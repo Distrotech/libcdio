@@ -196,5 +196,5 @@ main(int argc, const char *argv[])
   cdio_free_device_list(nrg_images);
   cdio_free_device_list(bincue_images);
   return 0;
-  
+#endif
 }

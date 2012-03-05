@@ -1,2 +1,0 @@
-# Compared in binary mode => terminators must be LF
-cd-paranoia-log.right eol=lf
