@@ -1,7 +1,5 @@
 /*
-  $Id: iso-info.c,v 1.40 2008/06/19 15:44:16 flameeyes Exp $
-
-  Copyright (C) 2004, 2005, 2006, 2008 Rocky Bernstein <rocky@gnu.org>
+  Copyright (C) 2004, 2005, 2006, 2008, 2012 Rocky Bernstein <rocky@gnu.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

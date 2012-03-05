@@ -53,7 +53,7 @@ testpregap_CFLAGS   = -DDATA_DIR=\"$(DATA_DIR)\"
 check_SCRIPTS = check_nrg.sh  check_cue.sh  check_cd_read.sh check_udf.sh \
                 check_iso.sh  check_fuzzyiso.sh check_opts.sh
 
-check_udf.sh: @abs_top_builddir@/example/extract
+check_udf.sh: @abs_top_builddir@/example/extract$(EXEEXT)
 
 check_PROGRAMS = $(hack)
 
@@ -65,7 +65,7 @@ check_DATA = vcd_demo.right vcd_demo_vcdinfo.right \
 	     check_opts0.right check_opts1.right check_opts2.right \
              check_opts3.right check_opts4.right check_opts5.right \
              check_opts6.right check_opts7.right \
-	     isofs-m1-read.right cdda-read.right \
+	     isofs-m1-read.right cdda-read.right cdtext.right \
 	     copying.right copying-rr.right \
 	     joliet.right joliet-nojoliet.right \
 	     copying.gpl copying-rr.gpl

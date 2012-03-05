@@ -22,9 +22,10 @@ SKIP_TEST_EXITCODE=77
 TZ=CUT
 # both 'en_US' and 'en_US.utf8' might be defined on some platforms
 if locale -a >/dev/null 2>&1 ; then 
-  LC_TIME=$(locale -a | grep 'en_US' | grep -v 'utf8' &2>/dev/null)
+  # Note: Solaris 10's shell can't handle $(..) so we use `...`
+  LC_TIME=`locale -a | grep 'en_US' | grep -v 'utf8' &2>/dev/null`
 fi
-[[ -z $LC_TIME ]] && {
+[ -z "$LC_TIME" ] && {
   LC_TIME=${LC_TIME:-en_US}
 }>/dev/null 2>&1
 
@@ -35,7 +36,7 @@ check_result() {
   shift
   msg=$1
   shift
-  cmdline=$*
+  cmdline="$cmd $*"
   if test $RC -ne 0 ; then 
     if test $RC -ne $SKIP_TEST_EXITCODE ; then
       echo "$0: $msg failed."
@@ -147,12 +148,12 @@ test_legal_header() {
   fi
   "${cmd}" ${opts} > ${outfile} 2>&1
   while read line; do
-    if ! grep -q "${line}" ${outfile}; then
+    @GREP@ "${line}" ${outfile} >/dev/null 2>&1
+    if [ "$?" -ne 0 ] ; then
       echo "$0: Legal header test failed due to missing expected line:"
       echo "  ${line}"
       echo "$0: Failed command:"
       echo "  ${cmd} ${opts}"
-      rm -f "${outfile}"
       exit 4
     fi
   done < ${srcdir}/check_legal.regex

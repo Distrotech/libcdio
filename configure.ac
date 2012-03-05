@@ -526,7 +526,7 @@ if test "x${enable_joliet}" != "xno"; then
   if test "x$joliet_supported" = "xyes"; then 
      AC_DEFINE(HAVE_JOLIET, [1], 
      [Define to 1 if you want ISO-9660 Joliet extension support. 
-     On most platform, this requires libiconv to be installed.])
+     On most platforms, this requires libiconv to be installed.])
      HAVE_JOLIET=1
   else
      AC_MSG_ERROR([You must have iconv installed.])
@@ -670,6 +670,7 @@ AC_CONFIG_FILES([
 AC_CONFIG_FILES([test/check_cue.sh], [chmod +x test/check_cue.sh])
 AC_CONFIG_FILES([test/check_iso.sh], [chmod +x test/check_iso.sh])
 AC_CONFIG_FILES([test/check_nrg.sh], [chmod +x test/check_nrg.sh])
+AC_CONFIG_FILES([test/check_udf.sh], [chmod +x test/check_udf.sh])
 AC_OUTPUT
 
 AC_MSG_RESULT([

@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2003, 2004, 2005, 2008, 2011 
+  Copyright (C) 2003, 2004, 2005, 2008, 2011, 2012
   Rocky Bernstein <rocky@gnu.org>
   
   This program is free software: you can redistribute it and/or modify

@@ -1,5 +1,4 @@
-#   Copyright (C) 2003, 2004, 2006, 2008, 2011, 2012
-#   Rocky Bernstein <rocky@gnu.org>
+#   Copyright (C) 2003, 2004, 2006, 2008, 2011 Rocky Bernstein <rocky@gnu.org>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -22,7 +21,7 @@
 cdio_config.h: $(top_builddir)/config.h
 	@echo  '#ifndef __CDIO_CONFIG_H__' > cdio_config.h
 	@echo  '#define __CDIO_CONFIG_H__' >> cdio_config.h
-	@sed -r -e 's/^#[ ]*define ([A-Z0-9_]+)/#define CDIO_\1/' $(top_builddir)/config.h >>cdio_config.h
+	@@SED@ -re 's/^(#[ \t]*define) /\1 CDIO_/' $(top_builddir)/config.h >>cdio_config.h
 	@echo '#endif /* #ifndef CDIO_CONFIG_H */' >>cdio_config.h
 
 libcdioincludedir=$(includedir)/cdio

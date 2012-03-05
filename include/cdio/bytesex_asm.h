@@ -1,7 +1,5 @@
 /*
-    $Id: bytesex_asm.h,v 1.3 2008/03/25 15:59:08 karl Exp $
-
-    Copyright (C) 2008 Rocky Bernstein <rocky@gnu.org>
+    Copyright (C) 2008, 2012 Rocky Bernstein <rocky@gnu.org>
                   2001, 2004, 2005 Herbert Valerio Riedel <hvr@gnu.org>
                   2001 Sven Ottemann <ac-logic@freenet.de>
 

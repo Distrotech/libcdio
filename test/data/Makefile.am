@@ -19,6 +19,7 @@ check_DATA = \
 	cdda.toc       \
 	cdtext.bin     \
 	cdtext.cdt     \
+	cdtext.cue     \
 	cdda.bin       \
 	copying-rr.iso \
 	copying.iso    \
@@ -47,6 +48,6 @@ check_DATA = \
         data5.toc      \
         data6.toc      \
         data7.toc      \
-	test-udf1.iso
+        test-udf1.iso
 
 EXTRA_DIST = $(check_DATA)

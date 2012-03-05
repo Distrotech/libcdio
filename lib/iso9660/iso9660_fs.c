@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2011
+  Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2011, 2012
     Rocky Bernstein <rocky@gnu.org>
   Copyright (C) 2001 Herbert Valerio Riedel <hvr@gnu.org>
 

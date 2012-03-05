@@ -7,5 +7,3 @@ or later.
 To compile your own project, you will probably need to add the missing/
 directory to your include path, as it provides stdint.h, inttypes.h and
 unistd.h that provide some of the missing types required by libcdio.
-
-$Id: README,v 1.1 2004/10/30 14:18:17 rocky Exp $

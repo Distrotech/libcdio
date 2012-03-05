@@ -1,6 +1,4 @@
-#   $Id: Makefile.am,v 1.18 2008/10/20 01:25:15 rocky Exp $
-#
-#   Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008
+#   Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2012
 #   Rocky Bernstein <rocky@gnu.org>
 #
 #   This program is free software: you can redistribute it and/or modify

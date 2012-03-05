@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2008
+    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2008, 2012
                   Rocky Bernstein <rocky@gnu.org>
     Copyright (C) 2000 Herbert Valerio Riedel <hvr@gnu.org>
 
@@ -183,16 +183,21 @@ typedef uint8_t ubyte;
 # define NULL ((void*) 0)
 #endif
 
-  /* Provide a notice for deprecated elements */
+  /** Provide a notice for deprecated elements. Before gcc 4.5 'deprecated'
+   takes no arguments. */
 #if defined(__GNUC__)
-#define LIBCDIO_DEPRECATED(object, notice) object __attribute__ ((deprecated(notice)))
+# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 5)
+#   define LIBCDIO_DEPRECATED(object, notice) object __attribute__ ((deprecated(notice)))
+# else
+#   define LIBCDIO_DEPRECATED(object, notice) object __attribute__ ((deprecated))
+# endif
 #elif defined(_MSC_VER)
 #define LIBCDIO_DEPRECATED(object, notice) __declspec(deprecated(notice)) object
 #else
 #define LIBCDIO_DEPRECATED(object, notice)
 #endif
 
-  /* our own offsetof()-like macro */
+  /** our own offsetof()-like macro */
 #define __cd_offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
   
   /*!

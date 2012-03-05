@@ -1,5 +1,5 @@
 /*
-  Copyright (C) 2003, 2004, 2005, 2007, 2008, 2011 
+  Copyright (C) 2003, 2004, 2005, 2007, 2008, 2011, 2012
   Rocky Bernstein <rocky@gnu.org>
   Copyright (C) 1996, 1997, 1998  Gerd Knorr <kraxel@bytesex.org>
          and Heiko Eiﬂfeldt <heiko@hexco.de>
