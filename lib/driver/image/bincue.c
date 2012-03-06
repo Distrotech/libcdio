@@ -64,7 +64,6 @@
 #include "cdio_private.h"
 #include "_cdio_stdio.h"
 
-
 /* reader */
 
 #define DEFAULT_CDIO_DEVICE "videocd.bin"

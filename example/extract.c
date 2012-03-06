@@ -137,7 +137,7 @@ static int udf_extract_files(udf_t *p_udf, udf_dirent_t *p_udf_dirent, const cha
         fwrite(buf, (size_t)MIN(i_file_length, i_read), 1, fd);
         if (ferror(fd)) {
           fprintf(stderr, "  Error writing file %s: %s\n", psz_fullpath, 
-		  strerror(errno));
+                  strerror(errno));
           goto out;
         }
         i_file_length -= i_read;
