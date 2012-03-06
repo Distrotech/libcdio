@@ -21,37 +21,42 @@
 */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#ifdef HAVE_WIN32_CDROM
-
-#if defined (_XBOX)
-# include "inttypes.h"
-# include "NtScsi.h"
-# include "undocumented.h"
-#else
-#if defined (__MINGW64__)
-# define _NTSRB_ /* Bad things happen if srb.h gets included */
-# include <windows.h>
-# include <ntddcdrm.h>
-# include <ntddscsi.h>
-#else
-# include <ddk/ntddcdrm.h>
-# include <ddk/ntddscsi.h>
-#endif
-# include <ddk/scsi.h>
-#endif
-
-#if defined (_WIN32)
-#include <windows.h>
+#include "config.h"
+#define __CDIO_CONFIG_H__ 1
 #endif
 
 #include <stdio.h>
 #include <stddef.h>  /* offsetof() macro */
 #include <sys/stat.h>
-#include <errno.h>
 #include <sys/types.h>
+#include <errno.h>
+
+#ifdef HAVE_WIN32_CDROM
+
+#if defined (_WIN32)
+#include <windows.h>
+#endif
+
+#ifndef __PRETTY_FUNCTION__
+#define __PRETTY_FUNCTION__ __FUNCTION__
+#endif
+
+#if defined (_XBOX)
+#include "inttypes.h"
+#include "NtScsi.h"
+#include "undocumented.h"
+#elif defined (__MINGW64__) || defined (_MSC_VER)
+#define _NTSRB_ /* Bad things happen if srb.h gets included */
+#include <ntddcdrm.h>
+#include <ntddscsi.h>
+#else
+#include <ddk/ntddcdrm.h>
+#include <ddk/ntddscsi.h>
+#endif
+
+#if !defined (_MSC_VER)
+#include <ddk/scsi.h>
+#endif
 
 #include <cdio/cdio.h>
 #include <cdio/sector.h>
@@ -70,7 +75,7 @@
 #define windows_error(loglevel,i_err) {                                 \
   char error_msg[80];                                                   \
   long int count;                                                       \
-  count = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,                     \
+  count = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM,                    \
                         NULL, i_err, MAKELANGID(LANG_NEUTRAL,           \
                                                 SUBLANG_DEFAULT),       \
                         error_msg, sizeof(error_msg), NULL);            \
@@ -162,6 +167,7 @@ audio_play_msf_win32ioctl (void *p_user_data, msf_t *p_start_msf,
   const _img_private_t *p_env = p_user_data;
   CDROM_PLAY_AUDIO_MSF play;
   DWORD dw_bytes_returned;
+  bool b_success;
 
   play.StartingM = cdio_from_bcd8(p_start_msf->m);
   play.StartingS = cdio_from_bcd8(p_start_msf->s);
@@ -171,7 +177,7 @@ audio_play_msf_win32ioctl (void *p_user_data, msf_t *p_start_msf,
   play.EndingS   = cdio_from_bcd8(p_end_msf->s);
   play.EndingF   = cdio_from_bcd8(p_end_msf->f);
 
-  bool b_success = 
+  b_success = 
     DeviceIoControl(p_env->h_device_handle, IOCTL_CDROM_PLAY_AUDIO_MSF,
                     &play, sizeof(play), NULL, 0, &dw_bytes_returned, NULL);
   
@@ -356,7 +362,7 @@ close_tray_win32ioctl (const char *psz_win32_drive)
     dw_access_flags = GENERIC_READ|GENERIC_WRITE;  /* add gen write on W2k/XP */
   else dw_access_flags = GENERIC_READ;
 
-  h_device_handle = CreateFile( psz_win32_drive, 
+  h_device_handle = CreateFileA( psz_win32_drive, 
                                 dw_access_flags,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE, 
                                 NULL, 
@@ -629,7 +635,7 @@ dvd_discmode_win32ioctl (_img_private_t *p_env)
   dvd.physical.type = CDIO_DVD_STRUCT_PHYSICAL;
   dvd.physical.layer_num = 0;
 
-  rc = mmc_get_dvd_struct_physical_private (p_env, &run_mmc_cmd_win32ioctl,
+  rc = mmc_get_dvd_struct_physical_private (p_env, (mmc_run_cmd_fn_t)&run_mmc_cmd_win32ioctl,
                                             &dvd);
 
   if (DRIVER_OP_SUCCESS == rc) {
@@ -743,7 +749,7 @@ is_cdrom_win32ioctl(const char c_drive_letter)
   sz_win32_drive[2]='\\';
   sz_win32_drive[3]='\0';
   
-  uDriveType = GetDriveType(sz_win32_drive);
+  uDriveType = GetDriveTypeA(sz_win32_drive);
   
   switch(uDriveType) {
   case DRIVE_CDROM: {
@@ -914,7 +920,7 @@ init_win32ioctl (_img_private_t *env)
                                       "\\\\.\\%c:", 
                                       env->gen.source_name[len-2] );
 
-    env->h_device_handle = CreateFile( psz_win32_drive, 
+    env->h_device_handle = CreateFileA( psz_win32_drive, 
                                        dw_access_flags,
                                        FILE_SHARE_READ | FILE_SHARE_WRITE, 
                                        NULL, 
@@ -926,7 +932,7 @@ init_win32ioctl (_img_private_t *env)
     {
           /* No good. try toggle write. */
           dw_access_flags ^= GENERIC_WRITE;  
-          env->h_device_handle = CreateFile( psz_win32_drive, 
+          env->h_device_handle = CreateFileA( psz_win32_drive, 
                                              dw_access_flags, 
                                              FILE_SHARE_READ,  
                                              NULL, 

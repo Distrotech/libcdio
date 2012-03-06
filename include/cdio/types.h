@@ -197,6 +197,21 @@ typedef uint8_t ubyte;
 #define LIBCDIO_DEPRECATED(object, notice)
 #endif
 
+/* DLL import/export declarations.
+   This is required for dealing with global variables in a Windows
+   dynamic library.
+   Any application relying on the DLL, as well as the DLL itself,
+   must be compiled with the LIBCDIO_DLL macro defined */
+#if defined(LIBCDIO_DLL)
+#ifdef _WINDLL
+#define LIBCDIO_DLL_DECLSPEC __declspec(dllexport)
+#else
+#define LIBCDIO_DLL_DECLSPEC __declspec(dllimport)
+#endif
+#else
+#define LIBCDIO_DLL_DECLSPEC
+#endif
+
   /** our own offsetof()-like macro */
 #define __cd_offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
   

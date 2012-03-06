@@ -49,7 +49,7 @@ typedef enum {
  * is desired. This is used by the internal default log handler, but
  * it could be use by applications which provide their own log handler.
  */
-extern cdio_log_level_t cdio_loglevel_default;
+LIBCDIO_DLL_DECLSPEC extern cdio_log_level_t cdio_loglevel_default;
 
 /**
  * This type defines the signature of a log handler.  For every

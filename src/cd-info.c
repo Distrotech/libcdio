@@ -893,7 +893,7 @@ main(int argc, char *argv[])
   if (0 == opts.no_device) {
     cdio_hwinfo_t          hwinfo;
     if (cdio_get_hwinfo(p_cdio, &hwinfo)) {
-      printf("%-28s: %s\n%-28s: %s\n%-28s: %s\n",
+      printf("%-42s: %s\n%-42s: %s\n%-42s: %s\n",
              "Vendor"  , hwinfo.psz_vendor, 
              "Model"   , hwinfo.psz_model, 
              "Revision", hwinfo.psz_revision);

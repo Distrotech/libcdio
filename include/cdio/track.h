@@ -28,7 +28,7 @@ extern "C" {
 #endif /* __cplusplus */
 
   /*! Printable tags for track_format_t enumeration.  */
-  extern const char *track_format2str[6];
+  LIBCDIO_DLL_DECLSPEC extern const char *track_format2str[6];
   
   typedef enum  {
     TRACK_FORMAT_AUDIO,   /**< Audio track, e.g. CD-DA */
@@ -69,7 +69,7 @@ extern "C" {
     is to be helpful in debuggers where wants just to refer to the
     CDIO_CDROM_* names and get something.
   */
-  extern enum cdio_track_enums {
+  LIBCDIO_DLL_DECLSPEC extern enum cdio_track_enums {
     CDIO_CDROM_LBA           = 0x01, /**< "logical block": first frame is #0 */
     CDIO_CDROM_MSF           = 0x02, /**< "minute-second-frame": binary, not
 					BCD here! */

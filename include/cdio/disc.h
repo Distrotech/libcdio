@@ -55,7 +55,7 @@ extern "C" {
     CDIO_DISC_MODE_CD_I	        /**< CD-i. */
   } discmode_t;
 
-  extern const char *discmode2str[];
+  LIBCDIO_DLL_DECLSPEC extern const char *discmode2str[];
   /**
     Get binary CD-Text information for a CdIo_t object.
 

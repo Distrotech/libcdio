@@ -127,17 +127,57 @@ char *aspierror(int nErrorCode)
     }
 }
 
+/* The following avoids having to link against winmm.lib */
+typedef MCIERROR (WINAPI *mciSendCommandA_t)(
+  MCIDEVICEID IDDevice,
+  UINT uMsg,
+  DWORD_PTR fdwCommand,
+  DWORD_PTR dwParam
+);
+typedef BOOL (WINAPI *mciGetErrorStringA_t)(
+  DWORD fdwError,
+  LPCSTR lpszErrorText,
+  UINT cchErrorText
+);
+static __inline
+HMODULE GetDLLHandle(const char* szDLLName)
+{
+	HMODULE h = NULL;
+	if ((h = GetModuleHandleA(szDLLName)) == NULL)
+		h = LoadLibraryA(szDLLName);
+	return h;
+}
+
 /* General ioctl() CD-ROM command function */
 static bool 
 mciSendCommand_aspi(int id, UINT msg, DWORD flags, void *arg)
 {
   MCIERROR mci_error;
-  
-  mci_error = mciSendCommand(id, msg, flags, (DWORD_PTR)arg);
+  static mciSendCommandA_t    pfmciSendCommandA = NULL;
+  static mciGetErrorStringA_t pfmciGetErrorStringA = NULL;
+
+  if (pfmciSendCommandA == NULL) {
+    pfmciSendCommandA = (mciSendCommandA_t) GetProcAddress(
+                         GetDLLHandle("winmm.dll"),"mciSendCommandA");
+    if (pfmciSendCommandA == NULL) {
+      cdio_warn("mciSendCommand() error: unable to locate mciSendCommandA() in wimm.dll");
+      return false;
+    }
+  }
+  if (pfmciGetErrorStringA == NULL) {
+    pfmciGetErrorStringA = (mciGetErrorStringA_t) GetProcAddress(
+                            GetDLLHandle("winmm.dll"), "mciGetErrorStringA");
+    if (pfmciGetErrorStringA == NULL) {
+      cdio_warn("mciSendCommand() error: unable to locate mciGetErrorStringA() in wimm.dll");
+      return false;
+    }
+  }
+
+  mci_error = pfmciSendCommandA(id, msg, flags, (DWORD_PTR)arg);
   if ( mci_error ) {
     char error[256];
-    
-    mciGetErrorString(mci_error, error, 256);
+
+    pfmciGetErrorStringA(mci_error, error, 256);
     cdio_warn("mciSendCommand() error: %s", error);
   }
   return(mci_error == 0);
@@ -153,7 +193,7 @@ have_aspi( HMODULE *hASPI,
            long (**lpSendCommand)( void* ) )
 {
   /* check if aspi is available */
-  *hASPI = LoadLibrary( "wnaspi32.dll" );
+  *hASPI = LoadLibraryA( "wnaspi32.dll" );
 
   if( *hASPI == NULL ) {
     cdio_warn("Unable to load ASPI DLL");
@@ -189,7 +229,7 @@ get_discmode_aspi (_img_private_t *p_env)
 
   dvd.physical.type = CDIO_DVD_STRUCT_PHYSICAL;
   dvd.physical.layer_num = 0;
-  if (0 == mmc_get_dvd_struct_physical_private (p_env, &run_mmc_cmd_aspi,
+  if (0 == mmc_get_dvd_struct_physical_private (p_env, (mmc_run_cmd_fn_t)&run_mmc_cmd_aspi,
                                                 &dvd)) {
     switch(dvd.physical.layer[0].book_type) {
     case CDIO_DVD_BOOK_DVD_ROM:  return CDIO_DISC_MODE_DVD_ROM;
@@ -746,13 +786,13 @@ wnaspi32_eject_media (void *user_data) {
   _img_private_t *env = user_data;
 
 
-  MCI_OPEN_PARMS op;
+  MCI_OPEN_PARMSA op;
   MCI_STATUS_PARMS st;
   DWORD i_flags;
   char psz_drive[4];
   int ret;
     
-  memset( &op, 0, sizeof(MCI_OPEN_PARMS) );
+  memset( &op, 0, sizeof(MCI_OPEN_PARMSA) );
   op.lpstrDeviceType = (LPCSTR)MCI_DEVTYPE_CD_AUDIO;
   strcpy( psz_drive, "X:" );
   psz_drive[0] = env->gen.source_name[0];
@@ -782,11 +822,11 @@ wnaspi32_eject_media (void *user_data) {
 track_format_t
 get_track_format_aspi(const _img_private_t *p_env, track_t track_num) 
 {
-  MCI_OPEN_PARMS op;
+  MCI_OPEN_PARMSA op;
   MCI_STATUS_PARMS st;
   DWORD i_flags;
 
-  memset( &op, 0, sizeof(MCI_OPEN_PARMS) );
+  memset( &op, 0, sizeof(MCI_OPEN_PARMSA) );
   op.lpstrDeviceType = (LPCSTR)MCI_DEVTYPE_CD_AUDIO;
   op.lpstrElementName = p_env->gen.source_name;
   

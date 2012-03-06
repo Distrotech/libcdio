@@ -60,6 +60,7 @@ static const char _rcsid[] = "$Id: win32.c,v 1.37 2008/04/21 18:30:21 karl Exp $
 
 #include <windows.h>
 #include <winioctl.h>
+#include <io.h>
 #include "win32.h"
 
 #ifdef HAVE_SYS_STAT_H
@@ -70,7 +71,7 @@ static const char _rcsid[] = "$Id: win32.c,v 1.37 2008/04/21 18:30:21 karl Exp $
 #include <sys/types.h>
 #endif
 
-#if defined (_MSC_VER) || defined (_XBOX)
+#if defined (_XBOX)
 #undef IN
 #else
 #include "aspi32.h"
@@ -190,6 +191,27 @@ audio_stop_win32 ( void *p_user_data)
   }
 }
 
+/* The following avoids having to link against winmm.lib */
+typedef MCIERROR (WINAPI *mciSendCommandA_t)(
+  MCIDEVICEID IDDevice,
+  UINT uMsg,
+  DWORD_PTR fdwCommand,
+  DWORD_PTR dwParam
+);
+typedef BOOL (WINAPI *mciGetErrorStringA_t)(
+  DWORD fdwError,
+  LPCSTR lpszErrorText,
+  UINT cchErrorText
+);
+static __inline
+HMODULE GetDLLHandle(const char* szDLLName)
+{
+	HMODULE h = NULL;
+	if ((h = GetModuleHandleA(szDLLName)) == NULL)
+		h = LoadLibraryA(szDLLName);
+	return h;
+}
+
 /* General ioctl() CD-ROM command function */
 static bool 
 _cdio_mciSendCommand(int id, UINT msg, DWORD flags, void *arg)
@@ -198,12 +220,31 @@ _cdio_mciSendCommand(int id, UINT msg, DWORD flags, void *arg)
   return false;
 #else
   MCIERROR mci_error;
-  
-  mci_error = mciSendCommand(id, msg, flags, (DWORD_PTR)arg);
+  static mciSendCommandA_t    pfmciSendCommandA = NULL;
+  static mciGetErrorStringA_t pfmciGetErrorStringA = NULL;
+
+  if (pfmciSendCommandA == NULL) {
+    pfmciSendCommandA = (mciSendCommandA_t) GetProcAddress(
+                         GetDLLHandle("winmm.dll"),"mciSendCommandA");
+    if (pfmciSendCommandA == NULL) {
+      cdio_warn("mciSendCommand() error: unable to locate mciSendCommandA() in wimm.dll");
+      return false;
+    }
+  }
+  if (pfmciGetErrorStringA == NULL) {
+    pfmciGetErrorStringA = (mciGetErrorStringA_t) GetProcAddress(
+                            GetDLLHandle("winmm.dll"), "mciGetErrorStringA");
+    if (pfmciGetErrorStringA == NULL) {
+      cdio_warn("mciSendCommand() error: unable to locate mciGetErrorStringA() in wimm.dll");
+      return false;
+    }
+  }
+
+  mci_error = pfmciSendCommandA(id, msg, flags, (DWORD_PTR)arg);
   if ( mci_error ) {
     char error[256];
     
-    mciGetErrorString(mci_error, error, 256);
+    pfmciGetErrorStringA(mci_error, error, 256);
     cdio_warn("mciSendCommand() error: %s", error);
   }
   return(mci_error == 0);
@@ -596,11 +637,11 @@ open_close_media_win32 (const char *psz_win32_drive, DWORD command_flags)
 #ifdef _XBOX
   return DRIVER_OP_UNSUPPORTED;
 #else
-  MCI_OPEN_PARMS op;
+  MCI_OPEN_PARMSA op;
   DWORD i_flags;
   int ret;
     
-  memset( &op, 0, sizeof(MCI_OPEN_PARMS) );
+  memset( &op, 0, sizeof(MCI_OPEN_PARMSA) );
   op.lpstrDeviceType = (LPCSTR)MCI_DEVTYPE_CD_AUDIO;
   op.lpstrElementName = psz_win32_drive;
   
@@ -988,10 +1029,10 @@ cdio_open_am_win32 (const char *psz_orig_source, const char *psz_access_mode)
   _funcs.read_mode2_sector      = read_mode2_sector_win32;
   _funcs.read_mode2_sectors     = read_mode2_sectors_win32;
   _funcs.read_toc               = read_toc_win32;
-  _funcs.run_mmc_cmd            = run_mmc_cmd_win32;
+  _funcs.run_mmc_cmd            = (mmc_run_cmd_fn_t)run_mmc_cmd_win32;
   _funcs.set_arg                = set_arg_win32;
   _funcs.set_blocksize          = set_blocksize_mmc;
-  _funcs.set_speed              = set_drive_speed_mmc;
+  _funcs.set_speed              = (int (*)(void *,int))set_drive_speed_mmc;
 
   _data                 = calloc(1, sizeof (_img_private_t));
   _data->access_mode    = str_to_access_mode_win32(psz_access_mode);

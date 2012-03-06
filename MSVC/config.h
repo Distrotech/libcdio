@@ -15,13 +15,13 @@
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
-/* Define 1 if you are compiling using cygwin */
+/* Define to 1 if you are compiling using cygwin */
 /* #undef CYGWIN */
 
 /* what to put between the brackets for empty arrays */
 #define EMPTY_ARRAY_SIZE 0
 
-/* Define 1 if you have BSDI-type CD-ROM support */
+/* Define to 1 if you have BSDI-type CD-ROM support */
 /* #undef HAVE_BSDI_CDROM */
 
 /* Define this if you have libcddb installed */
@@ -36,7 +36,7 @@
 /* Define to 1 if you have the <curses.h> header file. */
 /* #undef HAVE_CURSES_H */
 
-/* Define 1 if you have Darwin OS X-type CD-ROM support */
+/* Define to 1 if you have Darwin OS X-type CD-ROM support */
 /* #undef HAVE_DARWIN_CDROM */
 
 /* Define if time.h defines extern long timezone and int daylight vars. */
@@ -60,7 +60,7 @@
 /* Define to 1 if you have the <fcntl.h> header file. */
 #define HAVE_FCNTL_H 1
 
-/* Define 1 if you have FreeBSD CD-ROM support */
+/* Define to 1 if you have FreeBSD CD-ROM support */
 /* #undef HAVE_FREEBSD_CDROM */
 
 /* Define to 1 if you have the `fseeko' function. */
@@ -110,7 +110,7 @@
 /* Supports ISO _Pragma() macro */
 /* #undef HAVE_ISOC99_PRAGMA */
 
-/* Define 1 if you want ISO-9660 Joliet extension support. You must have also
+/* Define to 1 if you want ISO-9660 Joliet extension support. You must have also
    libiconv installed to get Joliet extension support. */
 #define HAVE_JOLIET 1
 
@@ -129,13 +129,13 @@
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
 
-/* Define 1 if you have Linux-type CD-ROM support */
+/* Define to 1 if you have Linux-type CD-ROM support */
 /* #undef HAVE_LINUX_CDROM */
 
 /* Define to 1 if you have the <linux/cdrom.h> header file. */
 /* #undef HAVE_LINUX_CDROM_H */
 
-/* Define 1 if timeout is in cdrom_generic_command struct */
+/* Define to 1 if timeout is in cdrom_generic_command struct */
 /* #undef HAVE_LINUX_CDROM_TIMEOUT */
 
 /* Define to 1 if you have the <linux/major.h> header file. */
@@ -170,10 +170,10 @@
 /* Define to 1 if you have the <ncurses/ncurses.h> header file. */
 /* #undef HAVE_NCURSES_NCURSES_H */
 
-/* Define 1 if you have NetBSD CD-ROM support */
+/* Define to 1 if you have NetBSD CD-ROM support */
 /* #undef HAVE_NETBSD_CDROM */
 
-/* Define 1 if you have OS/2 CD-ROM support */
+/* Define to 1 if you have OS/2 CD-ROM support */
 /* #undef HAVE_OS2_CDROM */
 
 /* Define to 1 if you have the <pwd.h> header file. */
@@ -188,7 +188,7 @@
 /* Define to 1 if you have the `realpath' function. */
 /* #undef HAVE_REALPATH */
 
-/* Define 1 if you want ISO-9660 Rock-Ridge extension support. */
+/* Define to 1 if you want ISO-9660 Rock-Ridge extension support. */
 #define HAVE_ROCK 1
 
 /* Define to 1 if you have the `setegid' function. */
@@ -208,7 +208,7 @@
 /* The equivalent of snprintf on MSVC is _snprintf */
 #define snprintf _snprintf
 
-/* Define 1 if you have Solaris CD-ROM support */
+/* Define to 1 if you have Solaris CD-ROM support */
 /* #undef HAVE_SOLARIS_CDROM */
 
 /* Define to 1 if you have the <stdarg.h> header file. */
@@ -295,8 +295,8 @@
 /* Define to 1 if you have the `vsnprintf' function. */
 /* #undef HAVE_VSNPRINTF */
 
-/* Define 1 if you have MinGW CD-ROM support */
-/* #undef HAVE_WIN32_CDROM */
+/* Define to 1 if you have native Windows CD-ROM support */
+#define HAVE_WIN32_CDROM 1
 
 /* Define to 1 if you have the <windows.h> header file. */
 #define HAVE_WINDOWS_H 1
@@ -319,10 +319,10 @@
    */
 /* #undef LT_OBJDIR */
 
-/* Define 1 if you are compiling using MinGW */
+/* Define to 1 if you are compiling using MinGW */
 /* #undef MINGW32 */
 
-/* Define 1 if you need timezone defined to get timzone defined as a variable.
+/* Define to 1 if you need timezone defined to get timzone defined as a variable.
    In cygwin it is a function too */
 /* #undef NEED_TIMEZONEVAR */
 
