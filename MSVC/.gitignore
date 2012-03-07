@@ -1,0 +1,6 @@
+*.suo
+*.opensdf
+*.vcxproj.user
+ipch
+x86_32
+x86_64
