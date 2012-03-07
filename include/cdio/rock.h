@@ -40,7 +40,7 @@ extern "C" {
   be helpful in debuggers where wants just to refer to the ISO_ROCK_*
   names and get something.
 */
-extern enum iso_rock_enums {
+LIBCDIO_DLL_DECLSPEC extern enum iso_rock_enums {
   ISO_ROCK_IRUSR  = 000400,   /**< read permission (owner) */
   ISO_ROCK_IWUSR  = 000200,   /**< write permission (owner) */
   ISO_ROCK_IXUSR  = 000100,   /**< execute permission (owner) */

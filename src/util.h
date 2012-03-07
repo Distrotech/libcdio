@@ -86,16 +86,16 @@
 
 #define DEBUG 1
 #if DEBUG
-#define dbg_print(level, s, args...) \
+#define dbg_print(level, s, ...) \
    if (opts.debug_level >= level) \
-     report(stderr, "%s: "s, __func__ , ##args)
+     report(stderr, "%s: "s, __func__ , __VA_ARGS__)
 #else
-#define dbg_print(level, s, args...) 
+#define dbg_print(level, s, ...)
 #endif
 
-#define err_exit(fmt, args...) \
-  report(stderr, "%s: "fmt, program_name, ##args); \
-  myexit(p_cdio, EXIT_FAILURE)		     
+#define err_exit(fmt, ...) \
+  report(stderr, "%s: "fmt, program_name, __VA_ARGS__); \
+  myexit(p_cdio, EXIT_FAILURE)
   
 typedef enum
 {

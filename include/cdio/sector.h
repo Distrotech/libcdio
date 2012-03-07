@@ -94,7 +94,7 @@
         be helpful in debuggers where wants just to refer to the CDIO_CD_
         names and get something.
       */
-      extern enum cdio_cd_enums {
+      LIBCDIO_DLL_DECLSPEC extern enum cdio_cd_enums {
         CDIO_CD_MINS =              74,   /**< max. minutes per CD, not really
                                              a limit */
         CDIO_CD_SECS_PER_MIN =      60,   /**< seconds per minute */
@@ -165,7 +165,7 @@
       
       /*! String of bytes used to identify the beginning of a Mode 1 or
           Mode 2 sector. */
-      extern const uint8_t CDIO_SECTOR_SYNC_HEADER[CDIO_CD_SYNC_SIZE];
+      LIBCDIO_DLL_DECLSPEC extern const uint8_t CDIO_SECTOR_SYNC_HEADER[CDIO_CD_SYNC_SIZE];
       /**<  
         {0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0};
       */
@@ -175,7 +175,7 @@
         program it is to be helpful in debuggers where wants just to refer
         to the M2*_SECTOR_SIZE names and get something.
       */
-      extern enum m2_sector_enums {
+      LIBCDIO_DLL_DECLSPEC extern enum m2_sector_enums {
         M2F2_SECTOR_SIZE  = 2324,
         M2SUB_SECTOR_SIZE = 2332,
         M2RAW_SECTOR_SIZE = 2336

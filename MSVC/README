@@ -1,9 +1,28 @@
-Files in this directory are for compiling with Microsoft Visual C. 
+Files in this directory are for compiling with Microsoft Visual C.
 They are courtesy of John Oseman (mog) and Pete Batard <pete@akeo.ie>.
 
-The extract, driver, iso9660 and udf projects require Visual Studio 2010
-or later.
+These project files require Visual Studio 2010 or later.
+
+Two samples are currently provided:
+- cd-info provides information about CD and is dynamically linked against
+  libcdio.dll (as built by the libcdio solution files)
+- extract, which extracts the content of a disc, is statically linked against
+  the udf, iso9660 and driver components of libcdio
 
 To compile your own project, you will probably need to add the missing/
 directory to your include path, as it provides stdint.h, inttypes.h and
 unistd.h that provide some of the missing types required by libcdio.
+
+To link against the DLL, you must define LIBCDIO_DLL as a preprocessor macro.
+
+Also, please note that large file support in MSVC requires the following
+preprocessor macros to be defined during compilation:
+  _OFF_T_DEFINED
+  _off_t=__int64
+  off_t=_off_t
+  _FILE_OFFSET_BITS=64
+
+Finally, when using the debug DLL, be mindful that memory allocations from the
+runtime library may or may not be able to be freed depending on whether the
+debug or release version was invoked, and whether the application itself is
+release or debug. Please ensure that you use /MD or /MDd accordingly.
