@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Libcdio by Distrotech</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Libcdio</h1>
+          <h2>Mirror of git://git.sv.gnu.org/libcdio.git</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/Distrotech/libcdio/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/Distrotech/libcdio/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/Distrotech/libcdio" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>See README.libcdio for installation instructions.</p>
+
+<p>The libcdio package contains a library for CD-ROM and CD image
+access. Applications wishing to be oblivious of the OS- and
+device-dependent properties of a CD-ROM or of the specific details of
+various CD-image formats may benefit from using this library.</p>
+
+<p>A library for working with ISO-9660 filesystems libiso9660 is
+included. A generic interface for issuing MMC (multimedia commands) is
+also part of the libcdio library.</p>
+
+<p>Also included is a library for working with ISO-9660 filesystems.</p>
+
+<p>The CD-DA error/jitter correction library from cdparanoia
+(<a href="http://www.xiph.org/paranoia">http://www.xiph.org/paranoia</a>) is included as a separate library
+licenced under GPL v2.</p>
+
+<p>Some support for disk image types like CDRWin's BIN/CUE format,
+cdrdao's TOC format, and Nero's NRG format are available. Therefore,
+applications that use this library also have the ability to read disc
+images as though they were CD's.</p>
+
+<p>The library is written in C, however there are OO C++, Perl, Python
+and Ruby wrappers to interface to the library. However C++ is the only
+one that is bundled with this package, and the interfaces provide only
+a subset of the full features of the library.</p>
+
+<p>Also included in the libcdio package are a number of utility programs:</p>
+
+<ul>
+<li><p>cd-info  - displays CD information: number of tracks, CD-format and 
+     if possible basic information about the format.  If libcddb
+         (<a href="http://libcddb.sourceforge.net">http://libcddb.sourceforge.net</a>) is available, the cd-info
+         program will display CDDB matches on CD-DA discs. And if a
+         new enough version of libvcdinfo is available (from the
+     vcdimager project), then cd-info shows basic VCD information.</p></li>
+<li><p>cd-read  - performs low-level block reading of a CD or CD image, </p></li>
+<li><p>iso-info - displays ISO-9660 information from an ISO-9660 image, </p></li>
+<li><p>iso-read - extracting files from an ISO-9660 image, a version of the
+         CD-DA extraction tool cdparanoia which corrects for
+         CD-ROM jitter, and a simple curses-based CD player,
+         cdda-player using the analog CD-ROM output.</p></li>
+<li><p>cd-paranoia - port of cdparanoia (CD-DA jitter and error correction)
+            using libcdio back-end CD-reading. </p></li>
+</ul><p>There is very limited low-level support for MMC commands on some
+platforms. Using MMC writing can be done. However there is currently
+little higher level-support for writing. Other libraries like libburn,
+libdi, libscg, or libdvdread may be helpful.</p>
+
+<p>Some of the projects using libcdio are the Video CD authoring and
+ripping tools VCDImager (<a href="http://vcdimager.org">http://vcdimager.org</a>), a navigation-capable
+Video CD plugin and CD-DA plugins for the media players xine
+(<a href="http://xinehq.de">http://xinehq.de</a>), videolan's vlc (<a href="http://videolan.org">http://videolan.org</a>), media
+players mplayerxp (<a href="http://mplayerxp.sourceforge.net/">http://mplayerxp.sourceforge.net/</a>) and gmerlin
+(<a href="http://gmerlin.sourceforge.net">http://gmerlin.sourceforge.net</a>), kiso, a KDE GUI for creating,
+extracting and editing ISO-9600 images (<a href="http://kiso.sourceforge.net">http://kiso.sourceforge.net</a>),
+and a Samba vfs module that allows exporting a CD without mounting it
+(<a href="http://ontologistics.net/OpenSource/Samba/index.php">http://ontologistics.net/OpenSource/Samba/index.php</a>).</p>
+        </section>
+
+        <footer>
+          Libcdio is maintained by <a href="https://github.com/Distrotech">Distrotech</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
