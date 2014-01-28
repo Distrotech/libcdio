@@ -71,7 +71,7 @@ DEBUG=$(FLAGS)
 ##debug: 
 ##	$(MAKE) libcdio_paranoia.a CFLAGS="$(DEBUG)"
 
-LIBS = $(LIBCDIO_LIBS) $(LIBCDIO_CDDA_LIBS)
+LIBS = -lcdio $(LIBCDIO_CDDA_LIBS)
 
 
 ########################################################

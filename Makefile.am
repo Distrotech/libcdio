@@ -36,7 +36,7 @@ EXTRA_DIST = \
 	libudf.pc.in \
 	package/libcdio.spec.in 
 
-SUBDIRS = doc include lib src test example
+SUBDIRS = include lib src
 
 if BUILD_CD_PARANOIA
 paranoiapcs = libcdio_paranoia.pc libcdio_cdda.pc
@@ -44,10 +44,7 @@ endif
 
 # pkg-config(1) related rules
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libcdio.pc  \
-	         libiso9660.pc \
-	         libudf.pc \
-		 $(paranoiapcs)
+pkgconfig_DATA = $(paranoiapcs)
 
 if ENABLE_CXX_BINDINGS
 pkgconfig_DATA += \

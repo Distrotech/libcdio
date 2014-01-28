@@ -70,7 +70,7 @@ DEBUG=$(FLAGS) -DCDDA_TEST
 ##	$(CC) $(DEBUG) -c test_interface.c
 ##	$(LD) $(DEBUG) test_interface.o $(LDFLAGS) -o cdda_test $(LIBS) libcdio_cdda.a
 
-LIBS = $(LIBCDIO_LIBS) @COS_LIB@
+LIBS = -lcdio @COS_LIB@
 
 
 ########################################################

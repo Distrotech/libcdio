@@ -77,11 +77,11 @@ bin_iso_read     = iso-read
 man_iso_read     = iso-read.1
 endif
 
-mmc_tool_SOURCES = mmc-tool.c util.c util.h $(GETOPT_C)
-mmc_tool_LDADD   = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
-bin_mmc_tool     = mmc-tool
+#mmc_tool_SOURCES = mmc-tool.c util.c util.h $(GETOPT_C)
+#mmc_tool_LDADD   = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
+#bin_mmc_tool     = mmc-tool
 
-bin_PROGRAMS = $(bin_cd_drive) $(bin_cd_info)  $(bin_cdinfo_linux) $(bin_cd_read) $(bin_iso_info) $(bin_iso_read) $(bin_cdda_player) $(bin_mmc_tool)
+bin_PROGRAMS = $(bin_cd_drive) $(bin_cd_info)  $(bin_cdinfo_linux) $(bin_cd_read) $(bin_iso_info) $(bin_iso_read) $(bin_cdda_player)
 
 INCLUDES = -I$(top_srcdir) $(LIBCDIO_CFLAGS) $(VCDINFO_CFLAGS) $(CDDB_CFLAGS)
 

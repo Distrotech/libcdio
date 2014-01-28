@@ -27,4 +27,4 @@ if ENABLE_CXX_BINDINGS
 cxxdirs = cdio++
 endif
 
-SUBDIRS = driver iso9660 udf $(paranoiadirs) $(cxxdirs)
+SUBDIRS = $(paranoiadirs)

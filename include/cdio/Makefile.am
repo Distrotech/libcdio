@@ -30,41 +30,12 @@ cdio_config.h: $(top_srcdir)/config.h
 
 libcdioincludedir=$(includedir)/cdio
 dist_libcdioinclude_HEADERS = \
-	audio.h \
-	bytesex.h \
-	bytesex_asm.h \
-	cdio.h \
 	cdio_unconfig.h \
-	cd_types.h \
-	device.h \
-	disc.h \
-	ds.h \
-	dvd.h \
-	ecma_167.h \
-	iso9660.h \
-	logging.h \
-	mmc.h \
-	mmc_cmds.h \
-	mmc_hl_cmds.h \
-	mmc_ll_cmds.h \
-	mmc_util.h \
 	paranoia.h \
-	posix.h \
-	read.h \
-	rock.h \
-	sector.h \
-        track.h \
-        types.h \
-	udf.h \
 	udf_file.h \
-	udf_time.h \
-	utf8.h \
-	util.h \
-	version.h \
-	xa.h \
-	$(paranoiaheaders)
+	cdda.h
 
-nodist_libcdioinclude_HEADERS = cdio_config.h
+#nodist_libcdioinclude_HEADERS = cdio_config.h
 
 EXTRA_DIST = version.h.in
 BUILT_SOURCES = version.h
