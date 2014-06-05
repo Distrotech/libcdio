@@ -1203,6 +1203,7 @@ cdio_get_devices_solaris_cXtYdZs2(int flag)
     goto ex;
   }
   while (1) {
+    errno = 0;
     entry = readdir(dir);
     if (entry == NULL) {
       if (errno) {
